@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	foundation "github.com/estafette/estafette-foundation"
+	foundation "github.com/ziplineeci/ziplinee-foundation"
 )
 
 // EstafetteBuilder contains configuration for the ci-builder component
