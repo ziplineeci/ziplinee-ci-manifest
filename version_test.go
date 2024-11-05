@@ -11,7 +11,7 @@ func TestUnmarshalVersion(t *testing.T) {
 
 	t.Run("ReturnsSemverVersionByDefaultIfNoOtherVersionTypeIsSet", func(t *testing.T) {
 
-		var version EstafetteVersion
+		var version ZiplineeVersion
 
 		// act
 		err := yaml.Unmarshal([]byte(``), &version)
@@ -25,7 +25,7 @@ func TestUnmarshalVersion(t *testing.T) {
 
 	t.Run("ReturnsCustomVersionWithLabelTemplateDefaultingToRevisionPlaceholder", func(t *testing.T) {
 
-		var version EstafetteVersion
+		var version ZiplineeVersion
 
 		// act
 		err := yaml.Unmarshal([]byte(`
@@ -40,7 +40,7 @@ custom:
 
 	t.Run("ReturnsSemverVersionIfSemverIsSet", func(t *testing.T) {
 
-		var version EstafetteVersion
+		var version ZiplineeVersion
 
 		// act
 		err := yaml.Unmarshal([]byte(`
@@ -59,7 +59,7 @@ semver:
 
 	t.Run("ReturnsSemverVersionWithMajorDefaultingToZero", func(t *testing.T) {
 
-		var version EstafetteVersion
+		var version ZiplineeVersion
 
 		// act
 		err := yaml.Unmarshal([]byte(`
@@ -74,7 +74,7 @@ semver:
 
 	t.Run("ReturnsSemverVersionWithMinorDefaultingToZero", func(t *testing.T) {
 
-		var version EstafetteVersion
+		var version ZiplineeVersion
 
 		// act
 		err := yaml.Unmarshal([]byte(`
@@ -89,7 +89,7 @@ semver:
 
 	t.Run("ReturnsSemverVersionWithPatchDefaultingToAutoPlaceholder", func(t *testing.T) {
 
-		var version EstafetteVersion
+		var version ZiplineeVersion
 
 		// act
 		err := yaml.Unmarshal([]byte(`
@@ -105,7 +105,7 @@ semver:
 
 	t.Run("ReturnsSemverVersionWithLabelTemplateDefaultingToBranchPlaceholder", func(t *testing.T) {
 
-		var version EstafetteVersion
+		var version ZiplineeVersion
 
 		// act
 		err := yaml.Unmarshal([]byte(`
@@ -121,7 +121,7 @@ semver:
 
 	t.Run("ReturnsSemverVersionWithReleaseBranchDefaultingToMaster", func(t *testing.T) {
 
-		var version EstafetteVersion
+		var version ZiplineeVersion
 
 		// act
 		err := yaml.Unmarshal([]byte(`
@@ -137,7 +137,7 @@ semver:
 
 	t.Run("ReturnsSemverVersionWithMultipleReleaseBranchesForArray", func(t *testing.T) {
 
-		var version EstafetteVersion
+		var version ZiplineeVersion
 
 		// act
 		err := yaml.Unmarshal([]byte(`
@@ -158,10 +158,10 @@ func TestCustomVersion(t *testing.T) {
 
 	t.Run("ReturnsLabelTemplateAsIsWhenItHasNoPlaceholders", func(t *testing.T) {
 
-		version := EstafetteCustomVersion{
+		version := ZiplineeCustomVersion{
 			LabelTemplate: "whateveryoulike",
 		}
-		params := EstafetteVersionParams{
+		params := ZiplineeVersionParams{
 			AutoIncrement: 5,
 			Branch:        "release",
 			Revision:      "219aae19153da2b20ac1d88e2fd68e0b20274be2",
@@ -175,10 +175,10 @@ func TestCustomVersion(t *testing.T) {
 
 	t.Run("ReturnsLabelTemplateWithAutoPlaceholderReplaced", func(t *testing.T) {
 
-		version := EstafetteCustomVersion{
+		version := ZiplineeCustomVersion{
 			LabelTemplate: "{{auto}}",
 		}
-		params := EstafetteVersionParams{
+		params := ZiplineeVersionParams{
 			AutoIncrement: 5,
 			Branch:        "release",
 			Revision:      "219aae19153da2b20ac1d88e2fd68e0b20274be2",
@@ -192,10 +192,10 @@ func TestCustomVersion(t *testing.T) {
 
 	t.Run("ReturnsLabelTemplateWithBranchPlaceholderReplaced", func(t *testing.T) {
 
-		version := EstafetteCustomVersion{
+		version := ZiplineeCustomVersion{
 			LabelTemplate: "{{branch}}",
 		}
-		params := EstafetteVersionParams{
+		params := ZiplineeVersionParams{
 			AutoIncrement: 5,
 			Branch:        "release",
 			Revision:      "219aae19153da2b20ac1d88e2fd68e0b20274be2",
@@ -209,10 +209,10 @@ func TestCustomVersion(t *testing.T) {
 
 	t.Run("ReturnsLabelTemplateWithRevisionPlaceholderReplaced", func(t *testing.T) {
 
-		version := EstafetteCustomVersion{
+		version := ZiplineeCustomVersion{
 			LabelTemplate: "{{revision}}",
 		}
-		params := EstafetteVersionParams{
+		params := ZiplineeVersionParams{
 			AutoIncrement: 5,
 			Branch:        "release",
 			Revision:      "219aae19153da2b20ac1d88e2fd68e0b20274be2",
@@ -229,14 +229,14 @@ func TestSemverVersion(t *testing.T) {
 
 	t.Run("ReturnsMajorDotMinorDotPatchDashLabelTemplateAsIsWhenItHasNoPlaceholders", func(t *testing.T) {
 
-		version := EstafetteSemverVersion{
+		version := ZiplineeSemverVersion{
 			Major:         5,
 			Minor:         3,
 			Patch:         "6",
 			LabelTemplate: "whateveryoulike",
 			ReleaseBranch: StringOrStringArray{Values: []string{"alpha"}},
 		}
-		params := EstafetteVersionParams{
+		params := ZiplineeVersionParams{
 			AutoIncrement: 5,
 			Branch:        "release",
 			Revision:      "219aae19153da2b20ac1d88e2fd68e0b20274be2",
@@ -250,14 +250,14 @@ func TestSemverVersion(t *testing.T) {
 
 	t.Run("ReturnsSemverWithAutoPlaceholderInPatchReplaced", func(t *testing.T) {
 
-		version := EstafetteSemverVersion{
+		version := ZiplineeSemverVersion{
 			Major:         5,
 			Minor:         3,
 			Patch:         "{{auto}}",
 			LabelTemplate: "whateveryoulike",
 			ReleaseBranch: StringOrStringArray{Values: []string{"alpha"}},
 		}
-		params := EstafetteVersionParams{
+		params := ZiplineeVersionParams{
 			AutoIncrement: 16,
 			Branch:        "release",
 			Revision:      "219aae19153da2b20ac1d88e2fd68e0b20274be2",
@@ -271,14 +271,14 @@ func TestSemverVersion(t *testing.T) {
 
 	t.Run("ReturnsSemverWithBranchPlaceholderInLabelReplaced", func(t *testing.T) {
 
-		version := EstafetteSemverVersion{
+		version := ZiplineeSemverVersion{
 			Major:         5,
 			Minor:         3,
 			Patch:         "6",
 			LabelTemplate: "{{branch}}",
 			ReleaseBranch: StringOrStringArray{Values: []string{"release"}},
 		}
-		params := EstafetteVersionParams{
+		params := ZiplineeVersionParams{
 			AutoIncrement: 16,
 			Branch:        "alpha",
 			Revision:      "219aae19153da2b20ac1d88e2fd68e0b20274be2",
@@ -292,14 +292,14 @@ func TestSemverVersion(t *testing.T) {
 
 	t.Run("ReturnsSemverWithLabelWithoutSlashIfBranchHasSlash", func(t *testing.T) {
 
-		version := EstafetteSemverVersion{
+		version := ZiplineeSemverVersion{
 			Major:         5,
 			Minor:         3,
 			Patch:         "6",
 			LabelTemplate: "{{branch}}",
 			ReleaseBranch: StringOrStringArray{Values: []string{"release"}},
 		}
-		params := EstafetteVersionParams{
+		params := ZiplineeVersionParams{
 			AutoIncrement: 16,
 			Branch:        "feature/foo",
 			Revision:      "219aae19153da2b20ac1d88e2fd68e0b20274be2",
@@ -313,14 +313,14 @@ func TestSemverVersion(t *testing.T) {
 
 	t.Run("ReturnsSemverWithDNSSafeLabel", func(t *testing.T) {
 
-		version := EstafetteSemverVersion{
+		version := ZiplineeSemverVersion{
 			Major:         5,
 			Minor:         3,
 			Patch:         "6",
 			LabelTemplate: "{{branch}}",
 			ReleaseBranch: StringOrStringArray{Values: []string{"release"}},
 		}
-		params := EstafetteVersionParams{
+		params := ZiplineeVersionParams{
 			AutoIncrement: 16,
 			Branch:        "HOTFIX_production_deploy",
 			Revision:      "219aae19153da2b20ac1d88e2fd68e0b20274be2",
@@ -334,14 +334,14 @@ func TestSemverVersion(t *testing.T) {
 
 	t.Run("ReturnsSemverWithDNSSafeLabelForBranchStartingWithNumber", func(t *testing.T) {
 
-		version := EstafetteSemverVersion{
+		version := ZiplineeSemverVersion{
 			Major:         5,
 			Minor:         3,
 			Patch:         "6",
 			LabelTemplate: "{{revision}}",
 			ReleaseBranch: StringOrStringArray{Values: []string{"release"}},
 		}
-		params := EstafetteVersionParams{
+		params := ZiplineeVersionParams{
 			AutoIncrement: 16,
 			Branch:        "19.1.0",
 			Revision:      "219aae19153da2b20ac1d88e2fd68e0b20274be2",
@@ -355,14 +355,14 @@ func TestSemverVersion(t *testing.T) {
 
 	t.Run("ReturnsSemverWithDNSSafeLabelForRevisionStartingWithNumber", func(t *testing.T) {
 
-		version := EstafetteSemverVersion{
+		version := ZiplineeSemverVersion{
 			Major:         5,
 			Minor:         3,
 			Patch:         "6",
 			LabelTemplate: "{{branch}}",
 			ReleaseBranch: StringOrStringArray{Values: []string{"release"}},
 		}
-		params := EstafetteVersionParams{
+		params := ZiplineeVersionParams{
 			AutoIncrement: 16,
 			Branch:        "19.1.0",
 			Revision:      "219aae19153da2b20ac1d88e2fd68e0b20274be2",
@@ -376,14 +376,14 @@ func TestSemverVersion(t *testing.T) {
 
 	t.Run("ReturnsSemverWithDNSSafeLabelStartingWithALetter", func(t *testing.T) {
 
-		version := EstafetteSemverVersion{
+		version := ZiplineeSemverVersion{
 			Major:         5,
 			Minor:         3,
 			Patch:         "6",
 			LabelTemplate: "{{branch}}",
 			ReleaseBranch: StringOrStringArray{Values: []string{"release"}},
 		}
-		params := EstafetteVersionParams{
+		params := ZiplineeVersionParams{
 			AutoIncrement: 16,
 			Branch:        "123-HOTFIX_production_deploy",
 			Revision:      "219aae19153da2b20ac1d88e2fd68e0b20274be2",
@@ -397,14 +397,14 @@ func TestSemverVersion(t *testing.T) {
 
 	t.Run("ReturnsSemverWithDNSSafeLabelOfMax63Characters", func(t *testing.T) {
 
-		version := EstafetteSemverVersion{
+		version := ZiplineeSemverVersion{
 			Major:         5,
 			Minor:         3,
 			Patch:         "6",
 			LabelTemplate: "{{branch}}",
 			ReleaseBranch: StringOrStringArray{Values: []string{"release"}},
 		}
-		params := EstafetteVersionParams{
+		params := ZiplineeVersionParams{
 			AutoIncrement: 16,
 			Branch:        "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz123456789012",
 			Revision:      "219aae19153da2b20ac1d88e2fd68e0b20274be2",
@@ -418,14 +418,14 @@ func TestSemverVersion(t *testing.T) {
 
 	t.Run("ReturnsSemverWithLabelHyphensTrimmedAtEnd", func(t *testing.T) {
 
-		version := EstafetteSemverVersion{
+		version := ZiplineeSemverVersion{
 			Major:         5,
 			Minor:         3,
 			Patch:         "6",
 			LabelTemplate: "{{branch}}",
 			ReleaseBranch: StringOrStringArray{Values: []string{"release"}},
 		}
-		params := EstafetteVersionParams{
+		params := ZiplineeVersionParams{
 			AutoIncrement: 16,
 			Branch:        "-some-branch-surrounded-by-hyphens-",
 			Revision:      "219aae19153da2b20ac1d88e2fd68e0b20274be2",
@@ -439,14 +439,14 @@ func TestSemverVersion(t *testing.T) {
 
 	t.Run("ReturnsSemverWithoutLabelIfBranchMatchesReleaseBranch", func(t *testing.T) {
 
-		version := EstafetteSemverVersion{
+		version := ZiplineeSemverVersion{
 			Major:         5,
 			Minor:         3,
 			Patch:         "6",
 			LabelTemplate: "{{branch}}",
 			ReleaseBranch: StringOrStringArray{Values: []string{"release"}},
 		}
-		params := EstafetteVersionParams{
+		params := ZiplineeVersionParams{
 			AutoIncrement: 16,
 			Branch:        "release",
 			Revision:      "219aae19153da2b20ac1d88e2fd68e0b20274be2",
@@ -460,14 +460,14 @@ func TestSemverVersion(t *testing.T) {
 
 	t.Run("ReturnsSemverWithoutLabelIfBranchMatchesReleaseBranchRegularExpression", func(t *testing.T) {
 
-		version := EstafetteSemverVersion{
+		version := ZiplineeSemverVersion{
 			Major:         5,
 			Minor:         3,
 			Patch:         "6",
 			LabelTemplate: "{{branch}}",
 			ReleaseBranch: StringOrStringArray{Values: []string{"release/.+"}},
 		}
-		params := EstafetteVersionParams{
+		params := ZiplineeVersionParams{
 			AutoIncrement: 16,
 			Branch:        "release/abc",
 			Revision:      "219aae19153da2b20ac1d88e2fd68e0b20274be2",
@@ -481,14 +481,14 @@ func TestSemverVersion(t *testing.T) {
 
 	t.Run("ReturnsSemverWithLabelIfBranchDoesNotMatchReleaseBranchRegularExpression", func(t *testing.T) {
 
-		version := EstafetteSemverVersion{
+		version := ZiplineeSemverVersion{
 			Major:         5,
 			Minor:         3,
 			Patch:         "6",
 			LabelTemplate: "{{branch}}",
 			ReleaseBranch: StringOrStringArray{Values: []string{"release/[0-9]+"}},
 		}
-		params := EstafetteVersionParams{
+		params := ZiplineeVersionParams{
 			AutoIncrement: 16,
 			Branch:        "release/abc",
 			Revision:      "219aae19153da2b20ac1d88e2fd68e0b20274be2",

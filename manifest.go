@@ -13,35 +13,35 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
-// EstafetteManifest is the object that the .estafette.yaml deserializes to
-type EstafetteManifest struct {
-	Archived         bool                        `yaml:"archived,omitempty"`
-	Builder          EstafetteBuilder            `yaml:"builder,omitempty"`
-	Labels           map[string]string           `yaml:"labels,omitempty"`
-	Version          EstafetteVersion            `yaml:"version,omitempty"`
-	GlobalEnvVars    map[string]string           `yaml:"env,omitempty"`
-	Triggers         []*EstafetteTrigger         `yaml:"triggers,omitempty"`
-	Stages           []*EstafetteStage           `yaml:"-"`
-	Releases         []*EstafetteRelease         `yaml:"-"`
-	ReleaseTemplates []*EstafetteReleaseTemplate `yaml:"-"`
-	Bots             []*EstafetteBot             `yaml:"-"`
+// ZiplineeManifest is the object that the .ziplinee.yaml deserializes to
+type ZiplineeManifest struct {
+	Archived         bool                       `yaml:"archived,omitempty"`
+	Builder          ZiplineeBuilder            `yaml:"builder,omitempty"`
+	Labels           map[string]string          `yaml:"labels,omitempty"`
+	Version          ZiplineeVersion            `yaml:"version,omitempty"`
+	GlobalEnvVars    map[string]string          `yaml:"env,omitempty"`
+	Triggers         []*ZiplineeTrigger         `yaml:"triggers,omitempty"`
+	Stages           []*ZiplineeStage           `yaml:"-"`
+	Releases         []*ZiplineeRelease         `yaml:"-"`
+	ReleaseTemplates []*ZiplineeReleaseTemplate `yaml:"-"`
+	Bots             []*ZiplineeBot             `yaml:"-"`
 }
 
-// UnmarshalYAML customizes unmarshalling an EstafetteManifest
-func (c *EstafetteManifest) UnmarshalYAML(unmarshal func(interface{}) error) (err error) {
+// UnmarshalYAML customizes unmarshalling an ZiplineeManifest
+func (c *ZiplineeManifest) UnmarshalYAML(unmarshal func(interface{}) error) (err error) {
 
 	var aux struct {
-		Archived            bool                `yaml:"archived"`
-		Builder             EstafetteBuilder    `yaml:"builder"`
-		Labels              map[string]string   `yaml:"labels"`
-		Version             EstafetteVersion    `yaml:"version"`
-		GlobalEnvVars       map[string]string   `yaml:"env"`
-		DeprecatedPipelines yaml.MapSlice       `yaml:"pipelines"`
-		Triggers            []*EstafetteTrigger `yaml:"triggers"`
-		Stages              yaml.MapSlice       `yaml:"stages"`
-		Releases            yaml.MapSlice       `yaml:"releases"`
-		ReleaseTemplates    yaml.MapSlice       `yaml:"releaseTemplates"`
-		Bots                yaml.MapSlice       `yaml:"bots"`
+		Archived            bool               `yaml:"archived"`
+		Builder             ZiplineeBuilder    `yaml:"builder"`
+		Labels              map[string]string  `yaml:"labels"`
+		Version             ZiplineeVersion    `yaml:"version"`
+		GlobalEnvVars       map[string]string  `yaml:"env"`
+		DeprecatedPipelines yaml.MapSlice      `yaml:"pipelines"`
+		Triggers            []*ZiplineeTrigger `yaml:"triggers"`
+		Stages              yaml.MapSlice      `yaml:"stages"`
+		Releases            yaml.MapSlice      `yaml:"releases"`
+		ReleaseTemplates    yaml.MapSlice      `yaml:"releaseTemplates"`
+		Bots                yaml.MapSlice      `yaml:"bots"`
 	}
 
 	// unmarshal to auxiliary type
@@ -69,12 +69,12 @@ func (c *EstafetteManifest) UnmarshalYAML(unmarshal func(interface{}) error) (er
 			return err
 		}
 
-		var stage *EstafetteStage
+		var stage *ZiplineeStage
 		if err := yaml.Unmarshal(bytes, &stage); err != nil {
 			return err
 		}
 		if stage == nil {
-			stage = &EstafetteStage{}
+			stage = &ZiplineeStage{}
 		}
 
 		// set the stage name, overwriting the name property if set on the stage explicitly
@@ -83,7 +83,7 @@ func (c *EstafetteManifest) UnmarshalYAML(unmarshal func(interface{}) error) (er
 		c.Stages = append(c.Stages, stage)
 	}
 
-	releaseTemplates := map[string]*EstafetteReleaseTemplate{}
+	releaseTemplates := map[string]*ZiplineeReleaseTemplate{}
 
 	for _, mi := range aux.ReleaseTemplates {
 
@@ -92,12 +92,12 @@ func (c *EstafetteManifest) UnmarshalYAML(unmarshal func(interface{}) error) (er
 			return err
 		}
 
-		var releaseTemplate *EstafetteReleaseTemplate
+		var releaseTemplate *ZiplineeReleaseTemplate
 		if err := yaml.Unmarshal(bytes, &releaseTemplate); err != nil {
 			return err
 		}
 		if releaseTemplate == nil {
-			releaseTemplate = &EstafetteReleaseTemplate{}
+			releaseTemplate = &ZiplineeReleaseTemplate{}
 		}
 
 		if releaseTemplate.Name == "" {
@@ -115,12 +115,12 @@ func (c *EstafetteManifest) UnmarshalYAML(unmarshal func(interface{}) error) (er
 			return err
 		}
 
-		var release *EstafetteRelease
+		var release *ZiplineeRelease
 		if err := yaml.Unmarshal(bytes, &release); err != nil {
 			return err
 		}
 		if release == nil {
-			release = &EstafetteRelease{}
+			release = &ZiplineeRelease{}
 		}
 
 		if release.Name == "" {
@@ -139,12 +139,12 @@ func (c *EstafetteManifest) UnmarshalYAML(unmarshal func(interface{}) error) (er
 			return err
 		}
 
-		var bot *EstafetteBot
+		var bot *ZiplineeBot
 		if err := yaml.Unmarshal(bytes, &bot); err != nil {
 			return err
 		}
 		if bot == nil {
-			bot = &EstafetteBot{}
+			bot = &ZiplineeBot{}
 		}
 
 		bot.Name = mi.Key.(string)
@@ -154,19 +154,19 @@ func (c *EstafetteManifest) UnmarshalYAML(unmarshal func(interface{}) error) (er
 	return nil
 }
 
-// MarshalYAML customizes marshalling an EstafetteManifest
-func (c EstafetteManifest) MarshalYAML() (out interface{}, err error) {
+// MarshalYAML customizes marshalling an ZiplineeManifest
+func (c ZiplineeManifest) MarshalYAML() (out interface{}, err error) {
 	var aux struct {
-		Archived         bool                `yaml:"archived,omitempty"`
-		Builder          EstafetteBuilder    `yaml:"builder,omitempty"`
-		Labels           map[string]string   `yaml:"labels,omitempty"`
-		Version          EstafetteVersion    `yaml:"version,omitempty"`
-		GlobalEnvVars    map[string]string   `yaml:"env,omitempty"`
-		Triggers         []*EstafetteTrigger `yaml:"triggers,omitempty"`
-		Stages           yaml.MapSlice       `yaml:"stages,omitempty"`
-		Releases         yaml.MapSlice       `yaml:"releases,omitempty"`
-		ReleaseTemplates yaml.MapSlice       `yaml:"releaseTemplates,omitempty"`
-		Bots             yaml.MapSlice       `yaml:"bots,omitempty"`
+		Archived         bool               `yaml:"archived,omitempty"`
+		Builder          ZiplineeBuilder    `yaml:"builder,omitempty"`
+		Labels           map[string]string  `yaml:"labels,omitempty"`
+		Version          ZiplineeVersion    `yaml:"version,omitempty"`
+		GlobalEnvVars    map[string]string  `yaml:"env,omitempty"`
+		Triggers         []*ZiplineeTrigger `yaml:"triggers,omitempty"`
+		Stages           yaml.MapSlice      `yaml:"stages,omitempty"`
+		Releases         yaml.MapSlice      `yaml:"releases,omitempty"`
+		ReleaseTemplates yaml.MapSlice      `yaml:"releaseTemplates,omitempty"`
+		Bots             yaml.MapSlice      `yaml:"bots,omitempty"`
 	}
 
 	aux.Archived = c.Archived
@@ -204,8 +204,8 @@ func (c EstafetteManifest) MarshalYAML() (out interface{}, err error) {
 	return aux, err
 }
 
-// SetDefaults sets default values for properties of EstafetteManifest if not defined
-func (c *EstafetteManifest) SetDefaults(preferences EstafetteManifestPreferences) {
+// SetDefaults sets default values for properties of ZiplineeManifest if not defined
+func (c *ZiplineeManifest) SetDefaults(preferences ZiplineeManifestPreferences) {
 	c.Builder.SetDefaults(preferences)
 	c.Version.SetDefaults()
 
@@ -256,7 +256,7 @@ func (c *EstafetteManifest) SetDefaults(preferences EstafetteManifestPreferences
 }
 
 // Validate checks if the manifest is valid
-func (c *EstafetteManifest) Validate(preferences EstafetteManifestPreferences) (err error) {
+func (c *ZiplineeManifest) Validate(preferences ZiplineeManifestPreferences) (err error) {
 
 	err = c.Builder.validate(preferences)
 	if err != nil {
@@ -346,9 +346,9 @@ func (c *EstafetteManifest) Validate(preferences EstafetteManifestPreferences) (
 }
 
 // GetAllTriggers returns both build and release triggers as one list
-func (c *EstafetteManifest) GetAllTriggers(repoSource, repoOwner, repoName string) []EstafetteTrigger {
+func (c *ZiplineeManifest) GetAllTriggers(repoSource, repoOwner, repoName string) []ZiplineeTrigger {
 	// collect both build and release triggers
-	triggers := make([]EstafetteTrigger, 0)
+	triggers := make([]ZiplineeTrigger, 0)
 
 	pipelineName := fmt.Sprintf("%v/%v/%v", repoSource, repoOwner, repoName)
 
@@ -384,14 +384,14 @@ func (c *EstafetteManifest) GetAllTriggers(repoSource, repoOwner, repoName strin
 }
 
 // DeepCopy provides a copy of all nested pointers
-func (c *EstafetteManifest) DeepCopy() (target EstafetteManifest) {
+func (c *ZiplineeManifest) DeepCopy() (target ZiplineeManifest) {
 
 	copier.CopyWithOption(&target, c, copier.Option{IgnoreEmpty: true, DeepCopy: true})
 
 	return
 }
 
-// Exists checks whether the .estafette.yaml exists
+// Exists checks whether the .ziplinee.yaml exists
 func Exists(manifestPath string) bool {
 
 	if _, err := os.Stat(manifestPath); os.IsNotExist(err) {
@@ -403,8 +403,8 @@ func Exists(manifestPath string) bool {
 	return true
 }
 
-// ReadManifestFromFile reads the .estafette.yaml into an EstafetteManifest object
-func ReadManifestFromFile(preferences *EstafetteManifestPreferences, manifestPath string, validate bool) (manifest EstafetteManifest, err error) {
+// ReadManifestFromFile reads the .ziplinee.yaml into an ZiplineeManifest object
+func ReadManifestFromFile(preferences *ZiplineeManifestPreferences, manifestPath string, validate bool) (manifest ZiplineeManifest, err error) {
 
 	log.Debug().Msgf("Reading %v file...", manifestPath)
 
@@ -439,8 +439,8 @@ func ReadManifestFromFile(preferences *EstafetteManifestPreferences, manifestPat
 	return
 }
 
-// ReadManifest reads the string representation of .estafette.yaml into an EstafetteManifest object
-func ReadManifest(preferences *EstafetteManifestPreferences, manifestString string, validate bool) (manifest EstafetteManifest, err error) {
+// ReadManifest reads the string representation of .ziplinee.yaml into an ZiplineeManifest object
+func ReadManifest(preferences *ZiplineeManifestPreferences, manifestString string, validate bool) (manifest ZiplineeManifest, err error) {
 
 	// default preferences if not passed
 	if preferences == nil {
@@ -467,9 +467,9 @@ func ReadManifest(preferences *EstafetteManifestPreferences, manifestString stri
 }
 
 // GetDefaultManifestPreferences returns default preferences if not configured at the server
-func GetDefaultManifestPreferences() (preferences *EstafetteManifestPreferences) {
+func GetDefaultManifestPreferences() (preferences *ZiplineeManifestPreferences) {
 
-	preferences = &EstafetteManifestPreferences{}
+	preferences = &ZiplineeManifestPreferences{}
 	preferences.SetDefaults()
 
 	return

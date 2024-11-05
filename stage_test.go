@@ -11,43 +11,43 @@ import (
 func TestUnmarshalStage(t *testing.T) {
 	t.Run("ReturnsUnmarshaledStage", func(t *testing.T) {
 
-		var stage EstafetteStage
+		var stage ZiplineeStage
 
 		// act
 		err := yaml.Unmarshal([]byte(`
 image: docker:17.03.0-ce
 shell: /bin/bash
-workDir: /go/src/github.com/estafette/estafette-ci-manifest
+workDir: /go/src/github.com/ziplineeci/ziplinee-ci-manifest
 commands:
 - cp Dockerfile ./publish
-- docker build -t estafette-ci-builder ./publish
+- docker build -t ziplinee-ci-builder ./publish
 when:
-  server == 'estafette'`), &stage)
+  server == 'ziplinee'`), &stage)
 
 		assert.Nil(t, err)
 		assert.Equal(t, "docker:17.03.0-ce", stage.ContainerImage)
 		assert.Equal(t, "/bin/bash", stage.Shell)
-		assert.Equal(t, "/go/src/github.com/estafette/estafette-ci-manifest", stage.WorkingDirectory)
+		assert.Equal(t, "/go/src/github.com/ziplineeci/ziplinee-ci-manifest", stage.WorkingDirectory)
 		assert.Equal(t, 2, len(stage.Commands))
 		assert.Equal(t, "cp Dockerfile ./publish", stage.Commands[0])
-		assert.Equal(t, "docker build -t estafette-ci-builder ./publish", stage.Commands[1])
-		assert.Equal(t, "server == 'estafette'", stage.When)
+		assert.Equal(t, "docker build -t ziplinee-ci-builder ./publish", stage.Commands[1])
+		assert.Equal(t, "server == 'ziplinee'", stage.When)
 	})
 
 	t.Run("DefaultsShellToShIfNotPresent", func(t *testing.T) {
 
-		var stage EstafetteStage
+		var stage ZiplineeStage
 
 		// act
 		err := yaml.Unmarshal([]byte(`
 image: docker:17.03.0-ce
 commands:
 - cp Dockerfile ./publish
-- docker build -t estafette-ci-builder ./publish
+- docker build -t ziplinee-ci-builder ./publish
 when:
-  server == 'estafette'`), &stage)
+  server == 'ziplinee'`), &stage)
 
-		stage.SetDefaults(EstafetteBuilder{
+		stage.SetDefaults(ZiplineeBuilder{
 			OperatingSystem: "linux",
 		})
 
@@ -57,18 +57,18 @@ when:
 
 	t.Run("DefaultsShellToPowershellIfNotPresentForWindows", func(t *testing.T) {
 
-		var stage EstafetteStage
+		var stage ZiplineeStage
 
 		// act
 		err := yaml.Unmarshal([]byte(`
 image: docker:17.03.0-ce
 commands:
 - cp Dockerfile ./publish
-- docker build -t estafette-ci-builder ./publish
+- docker build -t ziplinee-ci-builder ./publish
 when:
-  server == 'estafette'`), &stage)
+  server == 'ziplinee'`), &stage)
 
-		stage.SetDefaults(EstafetteBuilder{
+		stage.SetDefaults(ZiplineeBuilder{
 			OperatingSystem: "windows",
 		})
 
@@ -78,16 +78,16 @@ when:
 
 	t.Run("DefaultsWhenToStatusEqualsSucceededIfNotPresent", func(t *testing.T) {
 
-		var stage EstafetteStage
+		var stage ZiplineeStage
 
 		// act
 		err := yaml.Unmarshal([]byte(`
 image: docker:17.03.0-ce
 commands:
 - cp Dockerfile ./publish
-- docker build -t estafette-ci-builder ./publish`), &stage)
+- docker build -t ziplinee-ci-builder ./publish`), &stage)
 
-		stage.SetDefaults(EstafetteBuilder{
+		stage.SetDefaults(ZiplineeBuilder{
 			OperatingSystem: "linux",
 		})
 
@@ -95,47 +95,47 @@ commands:
 		assert.Equal(t, "status == 'succeeded'", stage.When)
 	})
 
-	t.Run("DefaultsWorkingDirectoryToEstafetteWorkIfNotPresent", func(t *testing.T) {
+	t.Run("DefaultsWorkingDirectoryToZiplineeWorkIfNotPresent", func(t *testing.T) {
 
-		var stage EstafetteStage
+		var stage ZiplineeStage
 
 		// act
 		err := yaml.Unmarshal([]byte(`
 image: docker:17.03.0-ce
 commands:
 - cp Dockerfile ./publish
-- docker build -t estafette-ci-builder ./publish`), &stage)
+- docker build -t ziplinee-ci-builder ./publish`), &stage)
 
-		stage.SetDefaults(EstafetteBuilder{
+		stage.SetDefaults(ZiplineeBuilder{
 			OperatingSystem: "linux",
 		})
 
 		assert.Nil(t, err)
-		assert.Equal(t, "/estafette-work", stage.WorkingDirectory)
+		assert.Equal(t, "/ziplinee-work", stage.WorkingDirectory)
 	})
 
-	t.Run("DefaultsWorkingDirectoryToEstafetteWorkIfNotPresentForWindows", func(t *testing.T) {
+	t.Run("DefaultsWorkingDirectoryToZiplineeWorkIfNotPresentForWindows", func(t *testing.T) {
 
-		var stage EstafetteStage
+		var stage ZiplineeStage
 
 		// act
 		err := yaml.Unmarshal([]byte(`
 image: docker:17.03.0-ce
 commands:
 - cp Dockerfile ./publish
-- docker build -t estafette-ci-builder ./publish`), &stage)
+- docker build -t ziplinee-ci-builder ./publish`), &stage)
 
-		stage.SetDefaults(EstafetteBuilder{
+		stage.SetDefaults(ZiplineeBuilder{
 			OperatingSystem: "windows",
 		})
 
 		assert.Nil(t, err)
-		assert.Equal(t, "C:/estafette-work", stage.WorkingDirectory)
+		assert.Equal(t, "C:/ziplinee-work", stage.WorkingDirectory)
 	})
 
 	t.Run("ReturnsNonReservedSimplePropertyAsCustomProperty", func(t *testing.T) {
 
-		var stage EstafetteStage
+		var stage ZiplineeStage
 
 		// act
 		err := yaml.Unmarshal([]byte(`
@@ -143,7 +143,7 @@ image: docker:17.03.0-ce
 unknownProperty1: value1
 commands:
 - cp Dockerfile ./publish
-- docker build -t estafette-ci-builder ./publish`), &stage)
+- docker build -t ziplinee-ci-builder ./publish`), &stage)
 
 		assert.Nil(t, err)
 		assert.Equal(t, "value1", stage.CustomProperties["unknownProperty1"])
@@ -151,7 +151,7 @@ commands:
 
 	t.Run("ReturnsNonReservedArrayPropertyAsCustomProperty", func(t *testing.T) {
 
-		var stage EstafetteStage
+		var stage ZiplineeStage
 
 		// act
 		err := yaml.Unmarshal([]byte(`
@@ -161,7 +161,7 @@ unknownProperty3:
 - supported2
 commands:
 - cp Dockerfile ./publish
-- docker build -t estafette-ci-builder ./publish`), &stage)
+- docker build -t ziplinee-ci-builder ./publish`), &stage)
 
 		assert.Nil(t, err)
 		assert.NotNil(t, stage.CustomProperties["unknownProperty3"])
@@ -191,7 +191,7 @@ func TestJSONMarshalStage(t *testing.T) {
 
 	t.Run("ReturnsMarshaledStageForNestedCustomProperties", func(t *testing.T) {
 
-		var stage EstafetteStage
+		var stage ZiplineeStage
 
 		err := yaml.Unmarshal([]byte(`
 image: extensions/gke:dev
@@ -200,7 +200,7 @@ container:
 
 		assert.Nil(t, err)
 
-		stage.SetDefaults(EstafetteBuilder{
+		stage.SetDefaults(ZiplineeBuilder{
 			OperatingSystem: "linux",
 		})
 
@@ -208,30 +208,30 @@ container:
 		bytes, err := json.Marshal(stage)
 
 		if assert.Nil(t, err) {
-			assert.Equal(t, "{\"ContainerImage\":\"extensions/gke:dev\",\"Shell\":\"/bin/sh\",\"WorkingDirectory\":\"/estafette-work\",\"When\":\"status == 'succeeded'\",\"CustomProperties\":{\"container\":{\"repository\":\"extensions\"}}}", string(bytes))
+			assert.Equal(t, "{\"ContainerImage\":\"extensions/gke:dev\",\"Shell\":\"/bin/sh\",\"WorkingDirectory\":\"/ziplinee-work\",\"When\":\"status == 'succeeded'\",\"CustomProperties\":{\"container\":{\"repository\":\"extensions\"}}}", string(bytes))
 		}
 	})
 
 	t.Run("ReturnsMarshaledStage", func(t *testing.T) {
 
-		var stage EstafetteStage
+		var stage ZiplineeStage
 
 		// act
 		err := yaml.Unmarshal([]byte(`
 image: docker:17.03.0-ce
 shell: /bin/bash
-workDir: /go/src/github.com/estafette/estafette-ci-manifest
+workDir: /go/src/github.com/ziplineeci/ziplinee-ci-manifest
 commands:
 - cp Dockerfile ./publish
-- docker build -t estafette-ci-builder ./publish
+- docker build -t ziplinee-ci-builder ./publish
 when:
-  server == 'estafette'`), &stage)
+  server == 'ziplinee'`), &stage)
 
 		// act
 		bytes, err := json.Marshal(stage)
 
 		if assert.Nil(t, err) {
-			assert.Equal(t, "{\"ContainerImage\":\"docker:17.03.0-ce\",\"Shell\":\"/bin/bash\",\"WorkingDirectory\":\"/go/src/github.com/estafette/estafette-ci-manifest\",\"Commands\":[\"cp Dockerfile ./publish\",\"docker build -t estafette-ci-builder ./publish\"],\"When\":\"server == 'estafette'\"}", string(bytes))
+			assert.Equal(t, "{\"ContainerImage\":\"docker:17.03.0-ce\",\"Shell\":\"/bin/bash\",\"WorkingDirectory\":\"/go/src/github.com/ziplineeci/ziplinee-ci-manifest\",\"Commands\":[\"cp Dockerfile ./publish\",\"docker build -t ziplinee-ci-builder ./publish\"],\"When\":\"server == 'ziplinee'\"}", string(bytes))
 		}
 	})
 
@@ -240,20 +240,20 @@ when:
 func TestValidateOnStage(t *testing.T) {
 	t.Run("ReturnsErrorIfImageAndParallelStagesAreBothSet", func(t *testing.T) {
 
-		stage := EstafetteStage{
+		stage := ZiplineeStage{
 			ContainerImage: "docker",
-			ParallelStages: []*EstafetteStage{
-				&EstafetteStage{
+			ParallelStages: []*ZiplineeStage{
+				&ZiplineeStage{
 					ContainerImage: "docker",
 					Name:           "StageA",
 				},
-				&EstafetteStage{
+				&ZiplineeStage{
 					ContainerImage: "docker",
 					Name:           "StageB",
 				},
 			},
 		}
-		stage.SetDefaults(EstafetteBuilder{
+		stage.SetDefaults(ZiplineeBuilder{
 			OperatingSystem: "linux",
 			Track:           "stable",
 		})
@@ -266,20 +266,20 @@ func TestValidateOnStage(t *testing.T) {
 
 	t.Run("ReturnsErrorIfShellAndParallelStagesAreBothSet", func(t *testing.T) {
 
-		stage := EstafetteStage{
+		stage := ZiplineeStage{
 			Shell: "/bin/sh",
-			ParallelStages: []*EstafetteStage{
-				&EstafetteStage{
+			ParallelStages: []*ZiplineeStage{
+				&ZiplineeStage{
 					ContainerImage: "docker",
 					Name:           "StageA",
 				},
-				&EstafetteStage{
+				&ZiplineeStage{
 					ContainerImage: "docker",
 					Name:           "StageB",
 				},
 			},
 		}
-		stage.SetDefaults(EstafetteBuilder{
+		stage.SetDefaults(ZiplineeBuilder{
 			OperatingSystem: "linux",
 			Track:           "stable",
 		})
@@ -292,20 +292,20 @@ func TestValidateOnStage(t *testing.T) {
 
 	t.Run("ReturnsErrorIfWorkingDirectoryAndParallelStagesAreBothSet", func(t *testing.T) {
 
-		stage := EstafetteStage{
-			WorkingDirectory: "/estafette-work",
-			ParallelStages: []*EstafetteStage{
-				&EstafetteStage{
+		stage := ZiplineeStage{
+			WorkingDirectory: "/ziplinee-work",
+			ParallelStages: []*ZiplineeStage{
+				&ZiplineeStage{
 					ContainerImage: "docker",
 					Name:           "StageA",
 				},
-				&EstafetteStage{
+				&ZiplineeStage{
 					ContainerImage: "docker",
 					Name:           "StageB",
 				},
 			},
 		}
-		stage.SetDefaults(EstafetteBuilder{
+		stage.SetDefaults(ZiplineeBuilder{
 			OperatingSystem: "linux",
 			Track:           "stable",
 		})
@@ -318,20 +318,20 @@ func TestValidateOnStage(t *testing.T) {
 
 	t.Run("ReturnsErrorIfCommandsAndParallelStagesAreBothSet", func(t *testing.T) {
 
-		stage := EstafetteStage{
+		stage := ZiplineeStage{
 			Commands: []string{"dotnet build"},
-			ParallelStages: []*EstafetteStage{
-				&EstafetteStage{
+			ParallelStages: []*ZiplineeStage{
+				&ZiplineeStage{
 					ContainerImage: "docker",
 					Name:           "StageA",
 				},
-				&EstafetteStage{
+				&ZiplineeStage{
 					ContainerImage: "docker",
 					Name:           "StageB",
 				},
 			},
 		}
-		stage.SetDefaults(EstafetteBuilder{
+		stage.SetDefaults(ZiplineeBuilder{
 			OperatingSystem: "linux",
 			Track:           "stable",
 		})
@@ -344,22 +344,22 @@ func TestValidateOnStage(t *testing.T) {
 
 	t.Run("ReturnsErrorIfEnvvarsAndParallelStagesAreBothSet", func(t *testing.T) {
 
-		stage := EstafetteStage{
+		stage := ZiplineeStage{
 			EnvVars: map[string]string{
 				"ENVA": "value a",
 			},
-			ParallelStages: []*EstafetteStage{
-				&EstafetteStage{
+			ParallelStages: []*ZiplineeStage{
+				&ZiplineeStage{
 					ContainerImage: "docker",
 					Name:           "StageA",
 				},
-				&EstafetteStage{
+				&ZiplineeStage{
 					ContainerImage: "docker",
 					Name:           "StageB",
 				},
 			},
 		}
-		stage.SetDefaults(EstafetteBuilder{
+		stage.SetDefaults(ZiplineeBuilder{
 			OperatingSystem: "linux",
 			Track:           "stable",
 		})
@@ -372,10 +372,10 @@ func TestValidateOnStage(t *testing.T) {
 
 	t.Run("ReturnsErrorIfImageIsNotSetWithoutParallelStages", func(t *testing.T) {
 
-		stage := EstafetteStage{
+		stage := ZiplineeStage{
 			ContainerImage: "",
 		}
-		stage.SetDefaults(EstafetteBuilder{
+		stage.SetDefaults(ZiplineeBuilder{
 			OperatingSystem: "linux",
 			Track:           "stable",
 		})
@@ -388,16 +388,16 @@ func TestValidateOnStage(t *testing.T) {
 
 	t.Run("ReturnsNoErrorIfImageIsNotSetButHasService", func(t *testing.T) {
 
-		stage := EstafetteStage{
+		stage := ZiplineeStage{
 			ContainerImage: "",
-			Services: []*EstafetteService{
-				&EstafetteService{
+			Services: []*ZiplineeService{
+				&ZiplineeService{
 					Name:           "cockroachdb",
 					ContainerImage: "cockroachdb/cockroach:v19.2.0",
 				},
 			},
 		}
-		stage.SetDefaults(EstafetteBuilder{
+		stage.SetDefaults(ZiplineeBuilder{
 			OperatingSystem: "linux",
 			Track:           "stable",
 		})
@@ -410,10 +410,10 @@ func TestValidateOnStage(t *testing.T) {
 
 	t.Run("ReturnsNoErrorWhenAllFieldsAreValid", func(t *testing.T) {
 
-		stage := EstafetteStage{
+		stage := ZiplineeStage{
 			ContainerImage: "docker",
 		}
-		stage.SetDefaults(EstafetteBuilder{
+		stage.SetDefaults(ZiplineeBuilder{
 			OperatingSystem: "linux",
 			Track:           "stable",
 		})
@@ -426,19 +426,19 @@ func TestValidateOnStage(t *testing.T) {
 
 	t.Run("ReturnsNoErrorWhenAllParallelStagesAreValid", func(t *testing.T) {
 
-		stage := EstafetteStage{
-			ParallelStages: []*EstafetteStage{
-				&EstafetteStage{
+		stage := ZiplineeStage{
+			ParallelStages: []*ZiplineeStage{
+				&ZiplineeStage{
 					ContainerImage: "docker",
 					Name:           "StageA",
 				},
-				&EstafetteStage{
+				&ZiplineeStage{
 					ContainerImage: "docker",
 					Name:           "StageB",
 				},
 			},
 		}
-		stage.SetDefaults(EstafetteBuilder{
+		stage.SetDefaults(ZiplineeBuilder{
 			OperatingSystem: "linux",
 			Track:           "stable",
 		})

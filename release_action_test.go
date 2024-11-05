@@ -11,7 +11,7 @@ func TestJSONMarshal(t *testing.T) {
 
 	t.Run("ReturnsLowercaseName", func(t *testing.T) {
 
-		action := EstafetteReleaseAction{
+		action := ZiplineeReleaseAction{
 			Name: "deploy-canary",
 		}
 

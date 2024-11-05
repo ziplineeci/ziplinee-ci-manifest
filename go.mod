@@ -3,8 +3,8 @@ module github.com/ziplineeci/ziplinee-ci-manifest
 go 1.22.2
 
 require (
-	github.com/jinzhu/copier v0.4.0
-	github.com/robfig/cron v1.2.0
+	github.com/jinzhu/copier v0.2.8
+	github.com/robfig/cron v0.0.0-20180505203441-b41be1df6967
 	github.com/rs/zerolog v1.33.0
 	github.com/stretchr/testify v1.9.0
 	github.com/ziplineeci/ziplinee-foundation v0.0.1

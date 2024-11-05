@@ -1,20 +1,20 @@
-# Estafette CI
+# Ziplinee CI
 
-The `estafette-ci-manifest` library is part of the Estafette CI system documented at https://estafette.io.
+The `ziplinee-ci-manifest` library is part of the Ziplinee CI system documented at https://ziplinee.io.
 
-Please file any issues related to Estafette CI at https://github.com/estafette/estafette-ci-central/issues
+Please file any issues related to Ziplinee CI at https://github.com/ziplineeci/ziplinee-ci-central/issues
 
-## Estafette-ci-manifest
+## Ziplinee-ci-manifest
 
-This library contains the build manifest classes and helpers for the Estafette CI build system.
+This library contains the build manifest classes and helpers for the Ziplinee CI build system.
 
 ## Development
 
 To start development run
 
 ```bash
-git clone git@github.com:estafette/estafette-ci-manifest.git
-cd estafette-ci-manifest
+git clone git@github.com:ziplineeci/ziplinee-ci-manifest.git
+cd ziplinee-ci-manifest
 ```
 
 Before committing your changes run

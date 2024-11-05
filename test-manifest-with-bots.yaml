@@ -1,6 +1,6 @@
 labels:
-  app: estafette-ci-api
-  team: estafette-team
+  app: ziplinee-ci-api
+  team: ziplinee-team
   language: golang
 
 # automatically executed stages on a push to the repository
@@ -99,7 +99,7 @@ bots:
 
   stale-issues-bot:
     triggers:
-    - cron: 
+    - cron:
         schedule: '0 10 * * *'
     clone: true
     stages:

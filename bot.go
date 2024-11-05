@@ -4,24 +4,24 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
-// EstafetteBot allows to respond to any event coming from one of the integrations
-type EstafetteBot struct {
-	Name            string              `yaml:"-"`
-	Builder         *EstafetteBuilder   `yaml:"builder,omitempty"`
-	CloneRepository *bool               `yaml:"clone,omitempty" json:",omitempty"`
-	Triggers        []*EstafetteTrigger `yaml:"triggers,omitempty" json:",omitempty"`
-	Stages          []*EstafetteStage   `yaml:"-" json:",omitempty"`
+// ZiplineeBot allows to respond to any event coming from one of the integrations
+type ZiplineeBot struct {
+	Name            string             `yaml:"-"`
+	Builder         *ZiplineeBuilder   `yaml:"builder,omitempty"`
+	CloneRepository *bool              `yaml:"clone,omitempty" json:",omitempty"`
+	Triggers        []*ZiplineeTrigger `yaml:"triggers,omitempty" json:",omitempty"`
+	Stages          []*ZiplineeStage   `yaml:"-" json:",omitempty"`
 }
 
-// UnmarshalYAML customizes unmarshalling an EstafetteBot
-func (bot *EstafetteBot) UnmarshalYAML(unmarshal func(interface{}) error) (err error) {
+// UnmarshalYAML customizes unmarshalling an ZiplineeBot
+func (bot *ZiplineeBot) UnmarshalYAML(unmarshal func(interface{}) error) (err error) {
 
 	var aux struct {
-		Name            string              `yaml:"-"`
-		Builder         *EstafetteBuilder   `yaml:"builder"`
-		CloneRepository *bool               `yaml:"clone"`
-		Triggers        []*EstafetteTrigger `yaml:"triggers"`
-		Stages          yaml.MapSlice       `yaml:"stages"`
+		Name            string             `yaml:"-"`
+		Builder         *ZiplineeBuilder   `yaml:"builder"`
+		CloneRepository *bool              `yaml:"clone"`
+		Triggers        []*ZiplineeTrigger `yaml:"triggers"`
+		Stages          yaml.MapSlice      `yaml:"stages"`
 	}
 
 	// unmarshal to auxiliary type
@@ -42,12 +42,12 @@ func (bot *EstafetteBot) UnmarshalYAML(unmarshal func(interface{}) error) (err e
 			return err
 		}
 
-		var stage *EstafetteStage
+		var stage *ZiplineeStage
 		if err := yaml.Unmarshal(bytes, &stage); err != nil {
 			return err
 		}
 		if stage == nil {
-			stage = &EstafetteStage{}
+			stage = &ZiplineeStage{}
 		}
 
 		stage.Name = mi.Key.(string)
@@ -57,15 +57,15 @@ func (bot *EstafetteBot) UnmarshalYAML(unmarshal func(interface{}) error) (err e
 	return nil
 }
 
-// MarshalYAML customizes marshalling an EstafetteBot
-func (bot *EstafetteBot) MarshalYAML() (out interface{}, err error) {
+// MarshalYAML customizes marshalling an ZiplineeBot
+func (bot *ZiplineeBot) MarshalYAML() (out interface{}, err error) {
 
 	var aux struct {
-		Name            string              `yaml:"-"`
-		Builder         *EstafetteBuilder   `yaml:"builder,omitempty"`
-		CloneRepository *bool               `yaml:"clone,omitempty"`
-		Triggers        []*EstafetteTrigger `yaml:"triggers,omitempty"`
-		Stages          yaml.MapSlice       `yaml:"stages,omitempty"`
+		Name            string             `yaml:"-"`
+		Builder         *ZiplineeBuilder   `yaml:"builder,omitempty"`
+		CloneRepository *bool              `yaml:"clone,omitempty"`
+		Triggers        []*ZiplineeTrigger `yaml:"triggers,omitempty"`
+		Stages          yaml.MapSlice      `yaml:"stages,omitempty"`
 	}
 
 	// map auxiliary properties

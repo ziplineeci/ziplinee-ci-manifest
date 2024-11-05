@@ -1,6 +1,6 @@
 labels:
-  app: estafette-ci-api
-  team: estafette-team
+  app: ziplinee-ci-api
+  team: ziplinee-team
   language: golang
 
 # in addition to git push to the pipeline repository, the triggers will start a build as well
@@ -8,13 +8,13 @@ triggers:
 - pipeline:
     event: finished
     status: succeeded
-    name: github.com/estafette/estafette-ci-manifest
+    name: github.com/ziplineeci/ziplinee-ci-manifest
     branch: main
   builds:
     branch: main
 - git:
     event: push
-    repository: github.com/estafette/estafette-ci-builder
+    repository: github.com/ziplineeci/ziplinee-ci-builder
     branch: main
 - docker:
     event: push
@@ -40,9 +40,9 @@ releases:
   development:
     triggers:
     - pipeline:
-        name: github.com/estafette/estafette-ci-builder
+        name: github.com/ziplineeci/ziplinee-ci-builder
         branch: '!~ main'
-    - cron: 
+    - cron:
         schedule: '0 10 */1 * *'
     - pubsub:
         project: my-project-id
@@ -60,7 +60,7 @@ releases:
 
     triggers:
     - release:
-        name: github.com/estafette/estafette-ci-builder
+        name: github.com/ziplineeci/ziplinee-ci-builder
         target: development
       releases:
         action: deploy-canary

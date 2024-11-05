@@ -10,7 +10,7 @@ import (
 func TestToYamlMarshalling(t *testing.T) {
 
 	t.Run("ReturnsSameYamlLegacy", func(t *testing.T) {
-		var service EstafetteService
+		var service ZiplineeService
 
 		input := `name: kubernetes
 image: bsycorp/kind:latest-1.15
@@ -35,7 +35,7 @@ readiness:
 	})
 
 	t.Run("ReturnsSameYamlHttpGet", func(t *testing.T) {
-		var service EstafetteService
+		var service ZiplineeService
 
 		input := `name: kubernetes
 image: bsycorp/kind:latest-1.15
@@ -61,7 +61,7 @@ readinessProbe:
 	})
 
 	t.Run("ReturnsSameYamlExec", func(t *testing.T) {
-		var service EstafetteService
+		var service ZiplineeService
 
 		input := `name: kubernetes
 image: bsycorp/kind:latest-1.15
@@ -94,11 +94,11 @@ func TestSetDefaults(t *testing.T) {
 
 	t.Run("SetsShellToBinShIfEmpty", func(t *testing.T) {
 
-		service := EstafetteService{
+		service := ZiplineeService{
 			Shell: "",
 		}
-		builder := EstafetteBuilder{}
-		parentStage := EstafetteStage{}
+		builder := ZiplineeBuilder{}
+		parentStage := ZiplineeStage{}
 
 		// act
 		service.SetDefaults(builder, parentStage)
@@ -108,13 +108,13 @@ func TestSetDefaults(t *testing.T) {
 
 	t.Run("SetsShellToPowershellIfEmptyAndOperatingSystemIsWindows", func(t *testing.T) {
 
-		service := EstafetteService{
+		service := ZiplineeService{
 			Shell: "",
 		}
-		builder := EstafetteBuilder{
+		builder := ZiplineeBuilder{
 			OperatingSystem: "windows",
 		}
-		parentStage := EstafetteStage{}
+		parentStage := ZiplineeStage{}
 
 		// act
 		service.SetDefaults(builder, parentStage)
@@ -124,11 +124,11 @@ func TestSetDefaults(t *testing.T) {
 
 	t.Run("KeepsShellIfNotEmpty", func(t *testing.T) {
 
-		service := EstafetteService{
+		service := ZiplineeService{
 			Shell: "/bin/bash",
 		}
-		builder := EstafetteBuilder{}
-		parentStage := EstafetteStage{}
+		builder := ZiplineeBuilder{}
+		parentStage := ZiplineeStage{}
 
 		// act
 		service.SetDefaults(builder, parentStage)
@@ -138,11 +138,11 @@ func TestSetDefaults(t *testing.T) {
 
 	t.Run("SetsMultiStageToFalseIfNotSetAndParentStageHasImage", func(t *testing.T) {
 
-		service := EstafetteService{
+		service := ZiplineeService{
 			Shell: "/bin/bash",
 		}
-		builder := EstafetteBuilder{}
-		parentStage := EstafetteStage{
+		builder := ZiplineeBuilder{}
+		parentStage := ZiplineeStage{
 			ContainerImage: "alpine",
 		}
 
@@ -154,11 +154,11 @@ func TestSetDefaults(t *testing.T) {
 
 	t.Run("SetsMultiStageToTrueIfNotSetAndParentStageHasNoImage", func(t *testing.T) {
 
-		service := EstafetteService{
+		service := ZiplineeService{
 			Shell: "/bin/bash",
 		}
-		builder := EstafetteBuilder{}
-		parentStage := EstafetteStage{
+		builder := ZiplineeBuilder{}
+		parentStage := ZiplineeStage{
 			ContainerImage: "",
 		}
 
@@ -171,12 +171,12 @@ func TestSetDefaults(t *testing.T) {
 	t.Run("KeepsMultiStageIfSet", func(t *testing.T) {
 
 		trueValue := true
-		service := EstafetteService{
+		service := ZiplineeService{
 			Shell:      "/bin/bash",
 			MultiStage: &trueValue,
 		}
-		builder := EstafetteBuilder{}
-		parentStage := EstafetteStage{
+		builder := ZiplineeBuilder{}
+		parentStage := ZiplineeStage{
 			ContainerImage: "alpine",
 		}
 

@@ -41,8 +41,8 @@ func TestReadManifestFromFile(t *testing.T) {
 		manifest, err := ReadManifestFromFile(GetDefaultManifestPreferences(), "test-manifest.yaml", true)
 
 		assert.Nil(t, err)
-		assert.Equal(t, "estafette-ci-builder", manifest.Labels["app"])
-		assert.Equal(t, "estafette-team", manifest.Labels["team"])
+		assert.Equal(t, "ziplinee-ci-builder", manifest.Labels["app"])
+		assert.Equal(t, "ziplinee-team", manifest.Labels["team"])
 		assert.Equal(t, "golang", manifest.Labels["language"])
 	})
 
@@ -135,29 +135,29 @@ stages:
 
 		assert.Equal(t, "build", manifest.Stages[0].Name)
 		assert.Equal(t, "golang:1.8.0-alpine", manifest.Stages[0].ContainerImage)
-		assert.Equal(t, "/go/src/github.com/estafette/estafette-ci-builder", manifest.Stages[0].WorkingDirectory)
+		assert.Equal(t, "/go/src/github.com/ziplineeci/ziplinee-ci-builder", manifest.Stages[0].WorkingDirectory)
 		assert.Equal(t, "go test -v ./...", manifest.Stages[0].Commands[0])
-		assert.Equal(t, "CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o ./publish/estafette-ci-builder .", manifest.Stages[0].Commands[1])
+		assert.Equal(t, "CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o ./publish/ziplinee-ci-builder .", manifest.Stages[0].Commands[1])
 
 		assert.Equal(t, "bake", manifest.Stages[1].Name)
 		assert.Equal(t, "docker:17.03.0-ce", manifest.Stages[1].ContainerImage)
 		assert.Equal(t, "cp Dockerfile ./publish", manifest.Stages[1].Commands[0])
-		assert.Equal(t, "docker build -t estafette-ci-builder ./publish", manifest.Stages[1].Commands[1])
+		assert.Equal(t, "docker build -t ziplinee-ci-builder ./publish", manifest.Stages[1].Commands[1])
 
 		assert.Equal(t, "set-build-status", manifest.Stages[2].Name)
 		assert.Equal(t, "extensions/github-status:0.0.2", manifest.Stages[2].ContainerImage)
 		assert.Equal(t, 0, len(manifest.Stages[2].Commands))
-		assert.Equal(t, "server == 'estafette'", manifest.Stages[2].When)
+		assert.Equal(t, "server == 'ziplinee'", manifest.Stages[2].When)
 
 		assert.Equal(t, "push-to-docker-hub", manifest.Stages[3].Name)
 		assert.Equal(t, "docker:17.03.0-ce", manifest.Stages[3].ContainerImage)
-		assert.Equal(t, "docker login --username=${ESTAFETTE_DOCKER_HUB_USERNAME} --password='${ESTAFETTE_DOCKER_HUB_PASSWORD}'", manifest.Stages[3].Commands[0])
-		assert.Equal(t, "docker push estafette/${ESTAFETTE_LABEL_APP}:${ESTAFETTE_BUILD_VERSION}", manifest.Stages[3].Commands[1])
+		assert.Equal(t, "docker login --username=${ZIPLINEE_DOCKER_HUB_USERNAME} --password='${ZIPLINEE_DOCKER_HUB_PASSWORD}'", manifest.Stages[3].Commands[0])
+		assert.Equal(t, "docker push ziplinee/${ZIPLINEE_LABEL_APP}:${ZIPLINEE_BUILD_VERSION}", manifest.Stages[3].Commands[1])
 		assert.Equal(t, "status == 'succeeded' && branch == 'main'", manifest.Stages[3].When)
 
 		assert.Equal(t, "slack-notify", manifest.Stages[4].Name)
 		assert.Equal(t, "docker:17.03.0-ce", manifest.Stages[4].ContainerImage)
-		assert.Equal(t, "curl -X POST --data-urlencode 'payload={\"channel\": \"#build-status\", \"username\": \"estafette-ci-builder\", \"text\": \"Build ${ESTAFETTE_BUILD_VERSION} for ${ESTAFETTE_LABEL_APP} has failed!\"}' ${ESTAFETTE_SLACK_WEBHOOK}", manifest.Stages[4].Commands[0])
+		assert.Equal(t, "curl -X POST --data-urlencode 'payload={\"channel\": \"#build-status\", \"username\": \"ziplinee-ci-builder\", \"text\": \"Build ${ZIPLINEE_BUILD_VERSION} for ${ZIPLINEE_LABEL_APP} has failed!\"}' ${ZIPLINEE_SLACK_WEBHOOK}", manifest.Stages[4].Commands[0])
 		assert.Equal(t, "status == 'failed' || branch == 'main'", manifest.Stages[4].When)
 
 		assert.Equal(t, "some value with spaces", manifest.Stages[4].EnvVars["SOME_ENVIRONMENT_VAR"])
@@ -190,7 +190,7 @@ stages:
 
 		assert.Nil(t, err)
 
-		assert.Equal(t, "/go/src/github.com/estafette/estafette-ci-builder", manifest.Stages[0].WorkingDirectory)
+		assert.Equal(t, "/go/src/github.com/ziplineeci/ziplinee-ci-builder", manifest.Stages[0].WorkingDirectory)
 	})
 
 	t.Run("ReturnsWorkDirIfSet", func(t *testing.T) {
@@ -200,7 +200,7 @@ stages:
 
 		assert.Nil(t, err)
 
-		assert.Equal(t, "C:/estafette-work", manifest.Stages[1].WorkingDirectory)
+		assert.Equal(t, "C:/ziplinee-work", manifest.Stages[1].WorkingDirectory)
 	})
 
 	t.Run("ReturnsShellDefaultIfMissing", func(t *testing.T) {
@@ -365,12 +365,12 @@ pipelines:
   deploy:
     image: extensions/deploy-to-kubernetes-engine:stable
     shell: /bin/sh
-    workDir: /estafette-work
+    workDir: /ziplinee-work
     when: status == 'succeeded'
   create-release-notes:
     image: extensions/create-release-notes-from-changelog:stable
     shell: /bin/sh
-    workDir: /estafette-work
+    workDir: /ziplinee-work
     when: status == 'succeeded'
 `
 
@@ -397,8 +397,8 @@ pipelines:
 		assert.Nil(t, err)
 
 		if assert.Equal(t, 4, len(manifest.Triggers)) {
-			assert.Equal(t, "github.com/estafette/estafette-ci-manifest", manifest.Triggers[0].Pipeline.Name)
-			assert.Equal(t, "github.com/estafette/estafette-ci-builder", manifest.Triggers[1].Git.Repository)
+			assert.Equal(t, "github.com/ziplineeci/ziplinee-ci-manifest", manifest.Triggers[0].Pipeline.Name)
+			assert.Equal(t, "github.com/ziplineeci/ziplinee-ci-builder", manifest.Triggers[1].Git.Repository)
 			assert.Equal(t, "golang", manifest.Triggers[2].Docker.Image)
 			assert.Equal(t, "topic-name", manifest.Triggers[3].PubSub.Topic)
 		}
@@ -414,7 +414,7 @@ pipelines:
 		if assert.Equal(t, 2, len(manifest.Releases)) {
 			assert.Equal(t, "development", manifest.Releases[0].Name)
 			assert.Equal(t, 3, len(manifest.Releases[0].Triggers))
-			assert.Equal(t, "github.com/estafette/estafette-ci-builder", manifest.Releases[0].Triggers[0].Pipeline.Name)
+			assert.Equal(t, "github.com/ziplineeci/ziplinee-ci-builder", manifest.Releases[0].Triggers[0].Pipeline.Name)
 			assert.Equal(t, "0 10 */1 * *", manifest.Releases[0].Triggers[1].Cron.Schedule)
 			assert.Equal(t, "topic-name", manifest.Releases[0].Triggers[2].PubSub.Topic)
 		}
@@ -664,9 +664,9 @@ func TestManifestToJsonMarshalling(t *testing.T) {
 
 	t.Run("ReturnsStagesAsStages", func(t *testing.T) {
 
-		manifest := EstafetteManifest{
-			Stages: []*EstafetteStage{
-				&EstafetteStage{
+		manifest := ZiplineeManifest{
+			Stages: []*ZiplineeStage{
+				&ZiplineeStage{
 					Name: "build",
 				},
 			},
@@ -685,15 +685,15 @@ func TestManifestToJsonMarshalling(t *testing.T) {
 func TestManifestToYamlMarshalling(t *testing.T) {
 	t.Run("UnmarshallingThenMarshallingReturnsTheSameFile", func(t *testing.T) {
 
-		var manifest EstafetteManifest
+		var manifest ZiplineeManifest
 
 		input := `builder:
   track: stable
   os: windows
 labels:
-  app: estafette-ci-builder
+  app: ziplinee-ci-builder
   language: golang
-  team: estafette-team
+  team: ziplinee-team
 version:
   semver:
     major: 0
@@ -708,12 +708,12 @@ stages:
   deploy:
     image: extensions/deploy-to-kubernetes-engine:stable
     shell: /bin/sh
-    workDir: /estafette-work
+    workDir: /ziplinee-work
     when: status == 'succeeded'
   create-release-notes:
     image: extensions/create-release-notes-from-changelog:stable
     shell: /bin/sh
-    workDir: /estafette-work
+    workDir: /ziplinee-work
     when: status == 'succeeded'
 releases:
   staging:
@@ -721,19 +721,19 @@ releases:
       deploy:
         image: extensions/deploy-to-kubernetes-engine:stable
         shell: /bin/sh
-        workDir: /estafette-work
+        workDir: /ziplinee-work
         when: status == 'succeeded'
   production:
     stages:
       deploy:
         image: extensions/deploy-to-kubernetes-engine:stable
         shell: /bin/sh
-        workDir: /estafette-work
+        workDir: /ziplinee-work
         when: status == 'succeeded'
       create-release-notes:
         image: extensions/create-release-notes-from-changelog:stable
         shell: /bin/sh
-        workDir: /estafette-work
+        workDir: /ziplinee-work
         when: status == 'succeeded'
 `
 		err := yaml.Unmarshal([]byte(input), &manifest)
@@ -748,16 +748,16 @@ releases:
 
 	t.Run("UnmarshallingWithArchivedTrueThenMarshallingReturnsTheSameFile", func(t *testing.T) {
 
-		var manifest EstafetteManifest
+		var manifest ZiplineeManifest
 
 		input := `archived: true
 builder:
   track: stable
   os: windows
 labels:
-  app: estafette-ci-builder
+  app: ziplinee-ci-builder
   language: golang
-  team: estafette-team
+  team: ziplinee-team
 version:
   semver:
     major: 0
@@ -772,12 +772,12 @@ stages:
   deploy:
     image: extensions/deploy-to-kubernetes-engine:stable
     shell: /bin/sh
-    workDir: /estafette-work
+    workDir: /ziplinee-work
     when: status == 'succeeded'
   create-release-notes:
     image: extensions/create-release-notes-from-changelog:stable
     shell: /bin/sh
-    workDir: /estafette-work
+    workDir: /ziplinee-work
     when: status == 'succeeded'
 releases:
   staging:
@@ -788,7 +788,7 @@ releases:
       deploy:
         image: extensions/deploy-to-kubernetes-engine:stable
         shell: /bin/sh
-        workDir: /estafette-work
+        workDir: /ziplinee-work
         when: status == 'succeeded'
   production:
     builder:
@@ -798,12 +798,12 @@ releases:
       deploy:
         image: extensions/deploy-to-kubernetes-engine:stable
         shell: /bin/sh
-        workDir: /estafette-work
+        workDir: /ziplinee-work
         when: status == 'succeeded'
       create-release-notes:
         image: extensions/create-release-notes-from-changelog:stable
         shell: /bin/sh
-        workDir: /estafette-work
+        workDir: /ziplinee-work
         when: status == 'succeeded'
 `
 		err := yaml.Unmarshal([]byte(input), &manifest)
@@ -821,15 +821,15 @@ func TestManifestToJSONMarshalling(t *testing.T) {
 
 	t.Run("UnmarshallingYamlThenMarshalToJSONForNestedCustomProperties", func(t *testing.T) {
 
-		var manifest EstafetteManifest
+		var manifest ZiplineeManifest
 
 		input := `builder:
   track: stable
   os: windows
 labels:
-  app: estafette-ci-builder
+  app: ziplinee-ci-builder
   language: golang
-  team: estafette-team
+  team: ziplinee-team
 version:
   semver:
     major: 0
@@ -839,10 +839,10 @@ version:
     releaseBranch: main
 stages:
   test-alpha-version:
-    image: extensions/gke:${ESTAFETTE_BUILD_VERSION}
+    image: extensions/gke:${ZIPLINEE_BUILD_VERSION}
     credentials: gke-tooling
     app: gke
-    namespace: estafette
+    namespace: ziplinee
     visibility: private
     container:
       repository: extensions
@@ -864,7 +864,7 @@ stages:
 		output, err := json.Marshal(manifest)
 
 		if assert.Nil(t, err) {
-			assert.Equal(t, "{\"Archived\":false,\"Builder\":{\"Track\":\"stable\",\"OperatingSystem\":\"windows\",\"StorageMedium\":\"\",\"BuilderType\":\"docker\"},\"Labels\":{\"app\":\"estafette-ci-builder\",\"language\":\"golang\",\"team\":\"estafette-team\"},\"Version\":{\"SemVer\":{\"Major\":0,\"Minor\":0,\"Patch\":\"{{auto}}\",\"LabelTemplate\":\"{{branch}}\",\"ReleaseBranch\":\"main\"}},\"GlobalEnvVars\":null,\"Triggers\":null,\"Stages\":[{\"Name\":\"test-alpha-version\",\"ContainerImage\":\"extensions/gke:${ESTAFETTE_BUILD_VERSION}\",\"Shell\":\"powershell\",\"WorkingDirectory\":\"C:/estafette-work\",\"When\":\"status == 'succeeded'\",\"CustomProperties\":{\"app\":\"gke\",\"container\":{\"name\":\"gke\",\"repository\":\"extensions\",\"tag\":\"alpha\"},\"cpu\":{\"limit\":\"100m\",\"request\":\"100m\"},\"credentials\":\"gke-tooling\",\"dryrun\":true,\"memory\":{\"limit\":\"256Mi\",\"request\":\"256Mi\"},\"namespace\":\"estafette\",\"visibility\":\"private\"}}],\"Releases\":null,\"ReleaseTemplates\":null,\"Bots\":null}", string(output))
+			assert.Equal(t, "{\"Archived\":false,\"Builder\":{\"Track\":\"stable\",\"OperatingSystem\":\"windows\",\"StorageMedium\":\"\",\"BuilderType\":\"docker\"},\"Labels\":{\"app\":\"ziplinee-ci-builder\",\"language\":\"golang\",\"team\":\"ziplinee-team\"},\"Version\":{\"SemVer\":{\"Major\":0,\"Minor\":0,\"Patch\":\"{{auto}}\",\"LabelTemplate\":\"{{branch}}\",\"ReleaseBranch\":\"main\"}},\"GlobalEnvVars\":null,\"Triggers\":null,\"Stages\":[{\"Name\":\"test-alpha-version\",\"ContainerImage\":\"extensions/gke:${ZIPLINEE_BUILD_VERSION}\",\"Shell\":\"powershell\",\"WorkingDirectory\":\"C:/ziplinee-work\",\"When\":\"status == 'succeeded'\",\"CustomProperties\":{\"app\":\"gke\",\"container\":{\"name\":\"gke\",\"repository\":\"extensions\",\"tag\":\"alpha\"},\"cpu\":{\"limit\":\"100m\",\"request\":\"100m\"},\"credentials\":\"gke-tooling\",\"dryrun\":true,\"memory\":{\"limit\":\"256Mi\",\"request\":\"256Mi\"},\"namespace\":\"ziplinee\",\"visibility\":\"private\"}}],\"Releases\":null,\"ReleaseTemplates\":null,\"Bots\":null}", string(output))
 		}
 	})
 }
@@ -872,29 +872,29 @@ stages:
 func TestGetAllTriggers(t *testing.T) {
 	t.Run("ReturnsEmptyArrayIfNoTriggersAreDefined", func(t *testing.T) {
 
-		manifest := EstafetteManifest{}
+		manifest := ZiplineeManifest{}
 
 		// act
-		triggers := manifest.GetAllTriggers("github.com", "estafette", "estafette-ci-manifest")
+		triggers := manifest.GetAllTriggers("github.com", "ziplineeci", "ziplinee-ci-manifest")
 
 		assert.Equal(t, 0, len(triggers))
 	})
 
 	t.Run("ReturnsReleaseTriggersIfNoBuildTriggersAreDefined", func(t *testing.T) {
 
-		manifest := EstafetteManifest{
-			Stages: []*EstafetteStage{
+		manifest := ZiplineeManifest{
+			Stages: []*ZiplineeStage{
 				{
 					Name: "build",
 				},
 			},
-			Releases: []*EstafetteRelease{
+			Releases: []*ZiplineeRelease{
 				{
 					Name: "tooling",
-					Triggers: []*EstafetteTrigger{
+					Triggers: []*ZiplineeTrigger{
 						{
-							Pipeline:      &EstafettePipelineTrigger{},
-							ReleaseAction: &EstafetteTriggerReleaseAction{},
+							Pipeline:      &ZiplineePipelineTrigger{},
+							ReleaseAction: &ZiplineeTriggerReleaseAction{},
 						},
 					},
 				},
@@ -902,32 +902,32 @@ func TestGetAllTriggers(t *testing.T) {
 		}
 
 		// act
-		triggers := manifest.GetAllTriggers("github.com", "estafette", "estafette-ci-manifest")
+		triggers := manifest.GetAllTriggers("github.com", "ziplineeci", "ziplinee-ci-manifest")
 
 		assert.Equal(t, 1, len(triggers))
 	})
 
 	t.Run("ReturnsBuildAndReleaseTriggersIfBothAreDefined", func(t *testing.T) {
 
-		manifest := EstafetteManifest{
-			Stages: []*EstafetteStage{
+		manifest := ZiplineeManifest{
+			Stages: []*ZiplineeStage{
 				{
 					Name: "build",
 				},
 			},
-			Triggers: []*EstafetteTrigger{
+			Triggers: []*ZiplineeTrigger{
 				{
-					Pipeline:    &EstafettePipelineTrigger{},
-					BuildAction: &EstafetteTriggerBuildAction{},
+					Pipeline:    &ZiplineePipelineTrigger{},
+					BuildAction: &ZiplineeTriggerBuildAction{},
 				},
 			},
-			Releases: []*EstafetteRelease{
+			Releases: []*ZiplineeRelease{
 				{
 					Name: "tooling",
-					Triggers: []*EstafetteTrigger{
+					Triggers: []*ZiplineeTrigger{
 						{
-							Pipeline:      &EstafettePipelineTrigger{},
-							ReleaseAction: &EstafetteTriggerReleaseAction{},
+							Pipeline:      &ZiplineePipelineTrigger{},
+							ReleaseAction: &ZiplineeTriggerReleaseAction{},
 						},
 					},
 				},
@@ -935,43 +935,43 @@ func TestGetAllTriggers(t *testing.T) {
 		}
 
 		// act
-		triggers := manifest.GetAllTriggers("github.com", "estafette", "estafette-ci-manifest")
+		triggers := manifest.GetAllTriggers("github.com", "ziplineeci", "ziplinee-ci-manifest")
 
 		assert.Equal(t, 2, len(triggers))
 	})
 
 	t.Run("ReplacesPipelineNameWithActualPipelineNameIfValueIsSelf", func(t *testing.T) {
 
-		manifest := EstafetteManifest{
-			Stages: []*EstafetteStage{
+		manifest := ZiplineeManifest{
+			Stages: []*ZiplineeStage{
 				{
 					Name: "build",
 				},
 			},
-			Triggers: []*EstafetteTrigger{
+			Triggers: []*ZiplineeTrigger{
 				{
-					Pipeline: &EstafettePipelineTrigger{
+					Pipeline: &ZiplineePipelineTrigger{
 						Name: "self",
 					},
-					BuildAction: &EstafetteTriggerBuildAction{},
+					BuildAction: &ZiplineeTriggerBuildAction{},
 				},
 			},
-			Releases: []*EstafetteRelease{
+			Releases: []*ZiplineeRelease{
 				{
 					Name: "tooling",
-					Triggers: []*EstafetteTrigger{
+					Triggers: []*ZiplineeTrigger{
 						{
-							Pipeline: &EstafettePipelineTrigger{
+							Pipeline: &ZiplineePipelineTrigger{
 								Name: "self",
 							},
-							ReleaseAction: &EstafetteTriggerReleaseAction{},
+							ReleaseAction: &ZiplineeTriggerReleaseAction{},
 						},
 						{
-							Release: &EstafetteReleaseTrigger{
+							Release: &ZiplineeReleaseTrigger{
 								Name:   "self",
 								Target: "tooling",
 							},
-							ReleaseAction: &EstafetteTriggerReleaseAction{},
+							ReleaseAction: &ZiplineeTriggerReleaseAction{},
 						},
 					},
 				},
@@ -979,45 +979,45 @@ func TestGetAllTriggers(t *testing.T) {
 		}
 
 		// act
-		triggers := manifest.GetAllTriggers("github.com", "estafette", "estafette-ci-manifest")
+		triggers := manifest.GetAllTriggers("github.com", "ziplineeci", "ziplinee-ci-manifest")
 
-		assert.Equal(t, "github.com/estafette/estafette-ci-manifest", triggers[0].Pipeline.Name)
-		assert.Equal(t, "github.com/estafette/estafette-ci-manifest", triggers[1].Pipeline.Name)
-		assert.Equal(t, "github.com/estafette/estafette-ci-manifest", triggers[2].Release.Name)
+		assert.Equal(t, "github.com/ziplineeci/ziplinee-ci-manifest", triggers[0].Pipeline.Name)
+		assert.Equal(t, "github.com/ziplineeci/ziplinee-ci-manifest", triggers[1].Pipeline.Name)
+		assert.Equal(t, "github.com/ziplineeci/ziplinee-ci-manifest", triggers[2].Release.Name)
 	})
 
 	t.Run("DoesNotReplacePipelineNameWithActualPipelineNameIfValueIsNotSelf", func(t *testing.T) {
 
-		manifest := EstafetteManifest{
-			Stages: []*EstafetteStage{
+		manifest := ZiplineeManifest{
+			Stages: []*ZiplineeStage{
 				{
 					Name: "build",
 				},
 			},
-			Triggers: []*EstafetteTrigger{
+			Triggers: []*ZiplineeTrigger{
 				{
-					Pipeline: &EstafettePipelineTrigger{
-						Name: "github.com/estafette/estafette-ci-contracts",
+					Pipeline: &ZiplineePipelineTrigger{
+						Name: "github.com/ziplineeci/ziplinee-ci-contracts",
 					},
-					BuildAction: &EstafetteTriggerBuildAction{},
+					BuildAction: &ZiplineeTriggerBuildAction{},
 				},
 			},
-			Releases: []*EstafetteRelease{
+			Releases: []*ZiplineeRelease{
 				{
 					Name: "tooling",
-					Triggers: []*EstafetteTrigger{
+					Triggers: []*ZiplineeTrigger{
 						{
-							Pipeline: &EstafettePipelineTrigger{
-								Name: "github.com/estafette/estafette-ci-crypt",
+							Pipeline: &ZiplineePipelineTrigger{
+								Name: "github.com/ziplineeci/ziplinee-ci-crypt",
 							},
-							ReleaseAction: &EstafetteTriggerReleaseAction{},
+							ReleaseAction: &ZiplineeTriggerReleaseAction{},
 						},
 						{
-							Release: &EstafetteReleaseTrigger{
-								Name:   "github.com/estaftte/estafette-ci-api",
+							Release: &ZiplineeReleaseTrigger{
+								Name:   "github.com/ziplineeci/ziplinee-ci-api",
 								Target: "tooling",
 							},
-							ReleaseAction: &EstafetteTriggerReleaseAction{},
+							ReleaseAction: &ZiplineeTriggerReleaseAction{},
 						},
 					},
 				},
@@ -1025,22 +1025,22 @@ func TestGetAllTriggers(t *testing.T) {
 		}
 
 		// act
-		triggers := manifest.GetAllTriggers("github.com", "estafette", "estafette-ci-manifest")
+		triggers := manifest.GetAllTriggers("github.com", "ziplineeci", "ziplinee-ci-manifest")
 
-		assert.Equal(t, "github.com/estafette/estafette-ci-contracts", triggers[0].Pipeline.Name)
-		assert.Equal(t, "github.com/estafette/estafette-ci-crypt", triggers[1].Pipeline.Name)
-		assert.Equal(t, "github.com/estaftte/estafette-ci-api", triggers[2].Release.Name)
+		assert.Equal(t, "github.com/ziplineeci/ziplinee-ci-contracts", triggers[0].Pipeline.Name)
+		assert.Equal(t, "github.com/ziplineeci/ziplinee-ci-crypt", triggers[1].Pipeline.Name)
+		assert.Equal(t, "github.com/ziplineeci/ziplinee-ci-api", triggers[2].Release.Name)
 	})
 }
 
 func TestValidate(t *testing.T) {
 	t.Run("ReturnsErrorIfTrackIsNotDevBetaOrStable", func(t *testing.T) {
 
-		manifest := EstafetteManifest{
-			Builder: EstafetteBuilder{
+		manifest := ZiplineeManifest{
+			Builder: ZiplineeBuilder{
 				Track: "nightly",
 			},
-			Stages: []*EstafetteStage{
+			Stages: []*ZiplineeStage{
 				{},
 			},
 		}
@@ -1054,11 +1054,11 @@ func TestValidate(t *testing.T) {
 
 	t.Run("ReturnsNoErrorIfTrackIsDev", func(t *testing.T) {
 
-		manifest := EstafetteManifest{
-			Builder: EstafetteBuilder{
+		manifest := ZiplineeManifest{
+			Builder: ZiplineeBuilder{
 				Track: "dev",
 			},
-			Stages: []*EstafetteStage{
+			Stages: []*ZiplineeStage{
 				{
 					ContainerImage: "docker",
 				},
@@ -1074,11 +1074,11 @@ func TestValidate(t *testing.T) {
 
 	t.Run("ReturnsNoErrorIfTrackIsBeta", func(t *testing.T) {
 
-		manifest := EstafetteManifest{
-			Builder: EstafetteBuilder{
+		manifest := ZiplineeManifest{
+			Builder: ZiplineeBuilder{
 				Track: "beta",
 			},
-			Stages: []*EstafetteStage{
+			Stages: []*ZiplineeStage{
 				{
 					ContainerImage: "docker",
 				},
@@ -1094,11 +1094,11 @@ func TestValidate(t *testing.T) {
 
 	t.Run("ReturnsNoErrorIfTrackIsStable", func(t *testing.T) {
 
-		manifest := EstafetteManifest{
-			Builder: EstafetteBuilder{
+		manifest := ZiplineeManifest{
+			Builder: ZiplineeBuilder{
 				Track: "stable",
 			},
-			Stages: []*EstafetteStage{
+			Stages: []*ZiplineeStage{
 				{
 					ContainerImage: "docker",
 				},

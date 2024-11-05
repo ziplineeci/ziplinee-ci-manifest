@@ -6,10 +6,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestEstafettePipelineTriggerSetDefaults(t *testing.T) {
+func TestZiplineePipelineTriggerSetDefaults(t *testing.T) {
 	t.Run("SetsEventToFinishedIfEmpty", func(t *testing.T) {
 
-		trigger := EstafettePipelineTrigger{
+		trigger := ZiplineePipelineTrigger{
 			Event: "",
 		}
 
@@ -21,7 +21,7 @@ func TestEstafettePipelineTriggerSetDefaults(t *testing.T) {
 
 	t.Run("SetsStatusToSucceededIfEmpty", func(t *testing.T) {
 
-		trigger := EstafettePipelineTrigger{
+		trigger := ZiplineePipelineTrigger{
 			Status: "",
 		}
 
@@ -33,7 +33,7 @@ func TestEstafettePipelineTriggerSetDefaults(t *testing.T) {
 
 	t.Run("SetsBranchToMasterOrMainIfEmpty", func(t *testing.T) {
 
-		trigger := EstafettePipelineTrigger{
+		trigger := ZiplineePipelineTrigger{
 			Branch: "",
 		}
 
@@ -44,10 +44,10 @@ func TestEstafettePipelineTriggerSetDefaults(t *testing.T) {
 	})
 }
 
-func TestEstafetteReleaseTriggerSetDefaults(t *testing.T) {
+func TestZiplineeReleaseTriggerSetDefaults(t *testing.T) {
 	t.Run("SetsEventToFinishedIfEmpty", func(t *testing.T) {
 
-		trigger := EstafetteReleaseTrigger{
+		trigger := ZiplineeReleaseTrigger{
 			Event: "",
 		}
 
@@ -58,7 +58,7 @@ func TestEstafetteReleaseTriggerSetDefaults(t *testing.T) {
 	})
 	t.Run("SetsStatusToSucceededIfEmpty", func(t *testing.T) {
 
-		trigger := EstafetteReleaseTrigger{
+		trigger := ZiplineeReleaseTrigger{
 			Status: "",
 		}
 
@@ -69,10 +69,10 @@ func TestEstafetteReleaseTriggerSetDefaults(t *testing.T) {
 	})
 }
 
-func TestEstafetteGitTriggerSetDefaults(t *testing.T) {
+func TestZiplineeGitTriggerSetDefaults(t *testing.T) {
 	t.Run("SetsEventToPushIfEmpty", func(t *testing.T) {
 
-		trigger := EstafetteGitTrigger{
+		trigger := ZiplineeGitTrigger{
 			Event: "",
 		}
 
@@ -84,7 +84,7 @@ func TestEstafetteGitTriggerSetDefaults(t *testing.T) {
 
 	t.Run("SetsBranchToMasterOrMainIfEmpty", func(t *testing.T) {
 
-		trigger := EstafetteGitTrigger{
+		trigger := ZiplineeGitTrigger{
 			Branch: "",
 		}
 
@@ -95,14 +95,14 @@ func TestEstafetteGitTriggerSetDefaults(t *testing.T) {
 	})
 }
 
-func TestEstafetteTriggerBuildActionSetDefaults(t *testing.T) {
+func TestZiplineeTriggerBuildActionSetDefaults(t *testing.T) {
 	t.Run("SetsBranchToMasterIfEmpty", func(t *testing.T) {
 
-		trigger := EstafetteTriggerBuildAction{
+		trigger := ZiplineeTriggerBuildAction{
 			Branch: "",
 		}
 
-		preferences := EstafetteManifestPreferences{
+		preferences := ZiplineeManifestPreferences{
 			DefaultBranch: "main",
 		}
 
@@ -113,14 +113,14 @@ func TestEstafetteTriggerBuildActionSetDefaults(t *testing.T) {
 	})
 }
 
-func TestEstafetteTriggerReleaseActionSetDefaults(t *testing.T) {
+func TestZiplineeTriggerReleaseActionSetDefaults(t *testing.T) {
 	t.Run("SetsTargetToTargetParam", func(t *testing.T) {
 
-		trigger := EstafetteTrigger{
-			Pipeline: &EstafettePipelineTrigger{
+		trigger := ZiplineeTrigger{
+			Pipeline: &ZiplineePipelineTrigger{
 				Name: "self",
 			},
-			ReleaseAction: &EstafetteTriggerReleaseAction{
+			ReleaseAction: &ZiplineeTriggerReleaseAction{
 				Target: "any",
 			},
 		}
@@ -133,11 +133,11 @@ func TestEstafetteTriggerReleaseActionSetDefaults(t *testing.T) {
 
 	t.Run("SetsVersionToLatestIfEmptyAndTriggersOnOtherPipeline", func(t *testing.T) {
 
-		trigger := EstafetteTrigger{
-			Pipeline: &EstafettePipelineTrigger{
-				Name: "github.com/estafette/estafette-ci-builder",
+		trigger := ZiplineeTrigger{
+			Pipeline: &ZiplineePipelineTrigger{
+				Name: "github.com/ziplineeci/ziplinee-ci-builder",
 			},
-			ReleaseAction: &EstafetteTriggerReleaseAction{
+			ReleaseAction: &ZiplineeTriggerReleaseAction{
 				Target:  "any",
 				Version: "",
 			},
@@ -151,11 +151,11 @@ func TestEstafetteTriggerReleaseActionSetDefaults(t *testing.T) {
 
 	t.Run("KeepsVersionIfNotEmpty", func(t *testing.T) {
 
-		trigger := EstafetteTrigger{
-			Pipeline: &EstafettePipelineTrigger{
+		trigger := ZiplineeTrigger{
+			Pipeline: &ZiplineePipelineTrigger{
 				Name: "self",
 			},
-			ReleaseAction: &EstafetteTriggerReleaseAction{
+			ReleaseAction: &ZiplineeTriggerReleaseAction{
 				Target:  "any",
 				Version: "current",
 			},
@@ -169,11 +169,11 @@ func TestEstafetteTriggerReleaseActionSetDefaults(t *testing.T) {
 
 	t.Run("SetsVersionToSameIfPipelineTriggerIsTheSelfPipeline", func(t *testing.T) {
 
-		trigger := EstafetteTrigger{
-			Pipeline: &EstafettePipelineTrigger{
+		trigger := ZiplineeTrigger{
+			Pipeline: &ZiplineePipelineTrigger{
 				Name: "self",
 			},
-			ReleaseAction: &EstafetteTriggerReleaseAction{
+			ReleaseAction: &ZiplineeTriggerReleaseAction{
 				Target:  "development",
 				Version: "",
 			},
@@ -187,11 +187,11 @@ func TestEstafetteTriggerReleaseActionSetDefaults(t *testing.T) {
 
 	t.Run("SetsVersionToSameIfReleaseTriggerIsTheSelfPipeline", func(t *testing.T) {
 
-		trigger := EstafetteTrigger{
-			Release: &EstafetteReleaseTrigger{
+		trigger := ZiplineeTrigger{
+			Release: &ZiplineeReleaseTrigger{
 				Name: "self",
 			},
-			ReleaseAction: &EstafetteTriggerReleaseAction{
+			ReleaseAction: &ZiplineeTriggerReleaseAction{
 				Target:  "development",
 				Version: "",
 			},

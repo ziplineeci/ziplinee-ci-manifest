@@ -8,18 +8,18 @@ import (
 	"strings"
 )
 
-// EstafetteVersion is the object that determines how version numbers are generated
-type EstafetteVersion struct {
-	SemVer *EstafetteSemverVersion `yaml:"semver,omitempty" json:",omitempty"`
-	Custom *EstafetteCustomVersion `yaml:"custom,omitempty" json:",omitempty"`
+// ZiplineeVersion is the object that determines how version numbers are generated
+type ZiplineeVersion struct {
+	SemVer *ZiplineeSemverVersion `yaml:"semver,omitempty" json:",omitempty"`
+	Custom *ZiplineeCustomVersion `yaml:"custom,omitempty" json:",omitempty"`
 }
 
-// UnmarshalYAML customizes unmarshalling an EstafetteVersion
-func (version *EstafetteVersion) UnmarshalYAML(unmarshal func(interface{}) error) (err error) {
+// UnmarshalYAML customizes unmarshalling an ZiplineeVersion
+func (version *ZiplineeVersion) UnmarshalYAML(unmarshal func(interface{}) error) (err error) {
 
 	var aux struct {
-		SemVer *EstafetteSemverVersion `yaml:"semver"`
-		Custom *EstafetteCustomVersion `yaml:"custom"`
+		SemVer *ZiplineeSemverVersion `yaml:"semver"`
+		Custom *ZiplineeCustomVersion `yaml:"custom"`
 	}
 
 	// unmarshal to auxiliary type
@@ -37,10 +37,10 @@ func (version *EstafetteVersion) UnmarshalYAML(unmarshal func(interface{}) error
 	return nil
 }
 
-// SetDefaults sets default values for properties of EstafetteVersion if not defined
-func (version *EstafetteVersion) SetDefaults() {
+// SetDefaults sets default values for properties of ZiplineeVersion if not defined
+func (version *ZiplineeVersion) SetDefaults() {
 	if version.Custom == nil && version.SemVer == nil {
-		version.SemVer = &EstafetteSemverVersion{}
+		version.SemVer = &ZiplineeSemverVersion{}
 	}
 
 	// if version is semver set defaults
@@ -65,7 +65,7 @@ func (version *EstafetteVersion) SetDefaults() {
 }
 
 // Version returns the version number as a string
-func (version *EstafetteVersion) Version(params EstafetteVersionParams) string {
+func (version *ZiplineeVersion) Version(params ZiplineeVersionParams) string {
 	if version.Custom != nil {
 		return version.Custom.Version(params)
 	}
@@ -75,18 +75,18 @@ func (version *EstafetteVersion) Version(params EstafetteVersionParams) string {
 	return ""
 }
 
-// EstafetteCustomVersion represents a custom version using a template
-type EstafetteCustomVersion struct {
+// ZiplineeCustomVersion represents a custom version using a template
+type ZiplineeCustomVersion struct {
 	LabelTemplate string `yaml:"labelTemplate"`
 }
 
 // Version returns the version number as a string
-func (v *EstafetteCustomVersion) Version(params EstafetteVersionParams) string {
+func (v *ZiplineeCustomVersion) Version(params ZiplineeVersionParams) string {
 	return parseTemplate(v.LabelTemplate, params.GetFuncMap())
 }
 
-// EstafetteSemverVersion represents semantic versioning (http://semver.org/)
-type EstafetteSemverVersion struct {
+// ZiplineeSemverVersion represents semantic versioning (http://semver.org/)
+type ZiplineeSemverVersion struct {
 	Major         int                 `yaml:"major"`
 	Minor         int                 `yaml:"minor"`
 	Patch         string              `yaml:"patch"`
@@ -95,7 +95,7 @@ type EstafetteSemverVersion struct {
 }
 
 // Version returns the version number as a string
-func (v *EstafetteSemverVersion) Version(params EstafetteVersionParams) string {
+func (v *ZiplineeSemverVersion) Version(params ZiplineeVersionParams) string {
 
 	patchWithLabel := v.GetPatchWithLabel(params)
 
@@ -103,7 +103,7 @@ func (v *EstafetteSemverVersion) Version(params EstafetteVersionParams) string {
 }
 
 // GetPatchWithLabel returns the formatted patch and label
-func (v *EstafetteSemverVersion) GetPatchWithLabel(params EstafetteVersionParams) string {
+func (v *ZiplineeSemverVersion) GetPatchWithLabel(params ZiplineeVersionParams) string {
 
 	patch := v.GetPatch(params)
 	label := v.GetLabel(params)
@@ -116,13 +116,13 @@ func (v *EstafetteSemverVersion) GetPatchWithLabel(params EstafetteVersionParams
 }
 
 // GetPatch returns the formatted patch
-func (v *EstafetteSemverVersion) GetPatch(params EstafetteVersionParams) string {
+func (v *ZiplineeSemverVersion) GetPatch(params ZiplineeVersionParams) string {
 
 	return parseTemplate(v.Patch, params.GetFuncMap())
 }
 
 // GetLabel returns the formatted label
-func (v *EstafetteSemverVersion) GetLabel(params EstafetteVersionParams) string {
+func (v *ZiplineeSemverVersion) GetLabel(params ZiplineeVersionParams) string {
 
 	label := parseTemplate(v.LabelTemplate, params.GetFuncMap())
 
@@ -143,7 +143,7 @@ func (v *EstafetteSemverVersion) GetLabel(params EstafetteVersionParams) string 
 	return v.tidyLabel(label)
 }
 
-func (v *EstafetteSemverVersion) tidyLabel(label string) string {
+func (v *ZiplineeSemverVersion) tidyLabel(label string) string {
 	// in order for the label to be used as a dns label (part between dots) it should only use
 	// lowercase letters, digits and hyphens and have a max length of 63 characters;
 	// also it should start with a letter and not end in a hyphen
@@ -172,15 +172,15 @@ func (v *EstafetteSemverVersion) tidyLabel(label string) string {
 	return label
 }
 
-// EstafetteVersionParams contains parameters used to generate a version number
-type EstafetteVersionParams struct {
+// ZiplineeVersionParams contains parameters used to generate a version number
+type ZiplineeVersionParams struct {
 	AutoIncrement int
 	Branch        string
 	Revision      string
 }
 
-// GetFuncMap returns EstafetteVersionParams as a function map for use in templating
-func (p *EstafetteVersionParams) GetFuncMap() template.FuncMap {
+// GetFuncMap returns ZiplineeVersionParams as a function map for use in templating
+func (p *ZiplineeVersionParams) GetFuncMap() template.FuncMap {
 
 	return template.FuncMap{
 		"auto":     func() string { return fmt.Sprint(p.AutoIncrement) },

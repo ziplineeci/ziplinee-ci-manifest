@@ -10,7 +10,7 @@ import (
 func TestUnmarshalBuilder(t *testing.T) {
 	t.Run("ReturnsUnmarshaledBuilder", func(t *testing.T) {
 
-		var builder EstafetteBuilder
+		var builder ZiplineeBuilder
 
 		// act
 		err := yaml.Unmarshal([]byte(`
@@ -22,7 +22,7 @@ track: dev`), &builder)
 
 	t.Run("DefaultsOperatingSystemToLinuxIfMissingIfNotPresent", func(t *testing.T) {
 
-		var builder EstafetteBuilder
+		var builder ZiplineeBuilder
 
 		// act
 		err := yaml.Unmarshal([]byte(`
@@ -35,7 +35,7 @@ track: dev`), &builder)
 
 	t.Run("DefaultsTrackToStableIfMissingIfNotPresent", func(t *testing.T) {
 
-		var builder EstafetteBuilder
+		var builder ZiplineeBuilder
 
 		// act
 		err := yaml.Unmarshal([]byte(` 
@@ -48,7 +48,7 @@ track: dev`), &builder)
 
 	t.Run("DefaultsStorageMediumToDefaultIfMissingIfNotPresent", func(t *testing.T) {
 
-		var builder EstafetteBuilder
+		var builder ZiplineeBuilder
 
 		// act
 		err := yaml.Unmarshal([]byte(` 
@@ -61,7 +61,7 @@ track: dev`), &builder)
 
 	t.Run("KeepsStorageMediumToIfSet", func(t *testing.T) {
 
-		var builder EstafetteBuilder
+		var builder ZiplineeBuilder
 
 		// act
 		err := yaml.Unmarshal([]byte(`

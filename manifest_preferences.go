@@ -1,14 +1,14 @@
 package manifest
 
-// EstafetteManifestPreferences is used to configure validation rules for the manifest
-type EstafetteManifestPreferences struct {
+// ZiplineeManifestPreferences is used to configure validation rules for the manifest
+type ZiplineeManifestPreferences struct {
 	LabelRegexes                    map[string]string            `yaml:"labelRegexes,omitempty" json:"labelRegexes,omitempty"`
 	BuilderOperatingSystems         []OperatingSystem            `yaml:"builderOperatingSystems,omitempty" json:"builderOperatingSystems,omitempty"`
 	BuilderTracksPerOperatingSystem map[OperatingSystem][]string `yaml:"builderTracksPerOperatingSystem,omitempty" json:"builderTracksPerOperatingSystem,omitempty"`
 	DefaultBranch                   string                       `yaml:"defaultBranch,omitempty" json:"defaultBranch,omitempty"`
 }
 
-func (p *EstafetteManifestPreferences) SetDefaults() {
+func (p *ZiplineeManifestPreferences) SetDefaults() {
 	if p.LabelRegexes == nil {
 		p.LabelRegexes = make(map[string]string)
 	}

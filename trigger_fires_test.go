@@ -7,22 +7,22 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestEstafettePipelineTriggerFires(t *testing.T) {
+func TestZiplineePipelineTriggerFires(t *testing.T) {
 	t.Run("ReturnsTrueIfEventStatusNameAndBranchMatch", func(t *testing.T) {
 
-		event := EstafettePipelineEvent{
+		event := ZiplineePipelineEvent{
 			RepoSource: "github.com",
-			RepoOwner:  "estafette",
-			RepoName:   "estafette-ci-api",
+			RepoOwner:  "ziplineeci",
+			RepoName:   "ziplinee-ci-api",
 			Branch:     "main",
 			Status:     "succeeded",
 			Event:      "finished",
 		}
 
-		trigger := EstafettePipelineTrigger{
+		trigger := ZiplineePipelineTrigger{
 			Event:  "finished",
 			Status: "succeeded",
-			Name:   "github.com/estafette/estafette-ci-api",
+			Name:   "github.com/ziplineeci/ziplinee-ci-api",
 			Branch: "main",
 		}
 
@@ -34,19 +34,19 @@ func TestEstafettePipelineTriggerFires(t *testing.T) {
 
 	t.Run("ReturnsTrueIfNegativeLookupBranchRegexDoesMatch", func(t *testing.T) {
 
-		event := EstafettePipelineEvent{
+		event := ZiplineePipelineEvent{
 			RepoSource: "github.com",
-			RepoOwner:  "estafette",
-			RepoName:   "estafette-ci-api",
+			RepoOwner:  "ziplineeci",
+			RepoName:   "ziplinee-ci-api",
 			Branch:     "development",
 			Status:     "succeeded",
 			Event:      "finished",
 		}
 
-		trigger := EstafettePipelineTrigger{
+		trigger := ZiplineePipelineTrigger{
 			Event:  "finished",
 			Status: "succeeded",
-			Name:   "github.com/estafette/estafette-ci-api",
+			Name:   "github.com/ziplineeci/ziplinee-ci-api",
 			Branch: "!~ main",
 		}
 
@@ -58,19 +58,19 @@ func TestEstafettePipelineTriggerFires(t *testing.T) {
 
 	t.Run("ReturnsTrueIfNegativeLookupBranchRegexDoesNotMatch", func(t *testing.T) {
 
-		event := EstafettePipelineEvent{
+		event := ZiplineePipelineEvent{
 			RepoSource: "github.com",
-			RepoOwner:  "estafette",
-			RepoName:   "estafette-ci-api",
+			RepoOwner:  "ziplineeci",
+			RepoName:   "ziplinee-ci-api",
 			Branch:     "main",
 			Status:     "succeeded",
 			Event:      "finished",
 		}
 
-		trigger := EstafettePipelineTrigger{
+		trigger := ZiplineePipelineTrigger{
 			Event:  "finished",
 			Status: "succeeded",
-			Name:   "github.com/estafette/estafette-ci-api",
+			Name:   "github.com/ziplineeci/ziplinee-ci-api",
 			Branch: "!~ main",
 		}
 
@@ -82,19 +82,19 @@ func TestEstafettePipelineTriggerFires(t *testing.T) {
 
 	t.Run("ReturnsFalseIfEventDoesNotMatch", func(t *testing.T) {
 
-		event := EstafettePipelineEvent{
+		event := ZiplineePipelineEvent{
 			RepoSource: "github.com",
-			RepoOwner:  "estafette",
-			RepoName:   "estafette-ci-api",
+			RepoOwner:  "ziplineeci",
+			RepoName:   "ziplinee-ci-api",
 			Branch:     "main",
 			Status:     "succeeded",
 			Event:      "finished",
 		}
 
-		trigger := EstafettePipelineTrigger{
+		trigger := ZiplineePipelineTrigger{
 			Event:  "started",
 			Status: "",
-			Name:   "github.com/estafette/estafette-ci-api",
+			Name:   "github.com/ziplineeci/ziplinee-ci-api",
 			Branch: "!= main",
 		}
 
@@ -106,19 +106,19 @@ func TestEstafettePipelineTriggerFires(t *testing.T) {
 
 	t.Run("ReturnsFalseIfStatusDoesNotMatch", func(t *testing.T) {
 
-		event := EstafettePipelineEvent{
+		event := ZiplineePipelineEvent{
 			RepoSource: "github.com",
-			RepoOwner:  "estafette",
-			RepoName:   "estafette-ci-api",
+			RepoOwner:  "ziplineeci",
+			RepoName:   "ziplinee-ci-api",
 			Branch:     "main",
 			Status:     "succeeded",
 			Event:      "finished",
 		}
 
-		trigger := EstafettePipelineTrigger{
+		trigger := ZiplineePipelineTrigger{
 			Event:  "finished",
 			Status: "failed",
-			Name:   "github.com/estafette/estafette-ci-api",
+			Name:   "github.com/ziplineeci/ziplinee-ci-api",
 			Branch: "main",
 		}
 
@@ -130,19 +130,19 @@ func TestEstafettePipelineTriggerFires(t *testing.T) {
 
 	t.Run("ReturnsFalseIfNameDoesNotMatch", func(t *testing.T) {
 
-		event := EstafettePipelineEvent{
+		event := ZiplineePipelineEvent{
 			RepoSource: "github.com",
-			RepoOwner:  "estafette",
-			RepoName:   "estafette-ci-api",
+			RepoOwner:  "ziplineeci",
+			RepoName:   "ziplinee-ci-api",
 			Branch:     "main",
 			Status:     "succeeded",
 			Event:      "finished",
 		}
 
-		trigger := EstafettePipelineTrigger{
+		trigger := ZiplineePipelineTrigger{
 			Event:  "finished",
 			Status: "succeeded",
-			Name:   "github.com/estafette/estafette-ci-builder",
+			Name:   "github.com/ziplineeci/ziplinee-ci-builder",
 			Branch: "main",
 		}
 
@@ -154,19 +154,19 @@ func TestEstafettePipelineTriggerFires(t *testing.T) {
 
 	t.Run("ReturnsFalseIfBranchDoesNotMatch", func(t *testing.T) {
 
-		event := EstafettePipelineEvent{
+		event := ZiplineePipelineEvent{
 			RepoSource: "github.com",
-			RepoOwner:  "estafette",
-			RepoName:   "estafette-ci-api",
+			RepoOwner:  "ziplineeci",
+			RepoName:   "ziplinee-ci-api",
 			Branch:     "main",
 			Status:     "succeeded",
 			Event:      "finished",
 		}
 
-		trigger := EstafettePipelineTrigger{
+		trigger := ZiplineePipelineTrigger{
 			Event:  "finished",
 			Status: "succeeded",
-			Name:   "github.com/estafette/estafette-ci-api",
+			Name:   "github.com/ziplineeci/ziplinee-ci-api",
 			Branch: "development",
 		}
 
@@ -177,22 +177,22 @@ func TestEstafettePipelineTriggerFires(t *testing.T) {
 	})
 }
 
-func TestEstafetteReleaseTriggerFires(t *testing.T) {
+func TestZiplineeReleaseTriggerFires(t *testing.T) {
 	t.Run("ReturnsTrueIfEventStatusNameAndBranchMatch", func(t *testing.T) {
 
-		event := EstafetteReleaseEvent{
+		event := ZiplineeReleaseEvent{
 			RepoSource: "github.com",
-			RepoOwner:  "estafette",
-			RepoName:   "estafette-ci-api",
+			RepoOwner:  "ziplineeci",
+			RepoName:   "ziplinee-ci-api",
 			Target:     "development",
 			Status:     "succeeded",
 			Event:      "finished",
 		}
 
-		trigger := EstafetteReleaseTrigger{
+		trigger := ZiplineeReleaseTrigger{
 			Event:  "finished",
 			Status: "succeeded",
-			Name:   "github.com/estafette/estafette-ci-api",
+			Name:   "github.com/ziplineeci/ziplinee-ci-api",
 			Target: "development",
 		}
 
@@ -204,19 +204,19 @@ func TestEstafetteReleaseTriggerFires(t *testing.T) {
 
 	t.Run("ReturnsFalseIfEventDoesNotMatch", func(t *testing.T) {
 
-		event := EstafetteReleaseEvent{
+		event := ZiplineeReleaseEvent{
 			RepoSource: "github.com",
-			RepoOwner:  "estafette",
-			RepoName:   "estafette-ci-api",
+			RepoOwner:  "ziplineeci",
+			RepoName:   "ziplinee-ci-api",
 			Target:     "development",
 			Status:     "succeeded",
 			Event:      "finished",
 		}
 
-		trigger := EstafetteReleaseTrigger{
+		trigger := ZiplineeReleaseTrigger{
 			Event:  "started",
 			Status: "",
-			Name:   "github.com/estafette/estafette-ci-api",
+			Name:   "github.com/ziplineeci/ziplinee-ci-api",
 			Target: "development",
 		}
 
@@ -228,19 +228,19 @@ func TestEstafetteReleaseTriggerFires(t *testing.T) {
 
 	t.Run("ReturnsFalseIfStatusDoesNotMatch", func(t *testing.T) {
 
-		event := EstafetteReleaseEvent{
+		event := ZiplineeReleaseEvent{
 			RepoSource: "github.com",
-			RepoOwner:  "estafette",
-			RepoName:   "estafette-ci-api",
+			RepoOwner:  "ziplineeci",
+			RepoName:   "ziplinee-ci-api",
 			Target:     "development",
 			Status:     "succeeded",
 			Event:      "finished",
 		}
 
-		trigger := EstafetteReleaseTrigger{
+		trigger := ZiplineeReleaseTrigger{
 			Event:  "finished",
 			Status: "failed",
-			Name:   "github.com/estafette/estafette-ci-api",
+			Name:   "github.com/ziplineeci/ziplinee-ci-api",
 			Target: "development",
 		}
 
@@ -252,19 +252,19 @@ func TestEstafetteReleaseTriggerFires(t *testing.T) {
 
 	t.Run("ReturnsFalseIfNameDoesNotMatch", func(t *testing.T) {
 
-		event := EstafetteReleaseEvent{
+		event := ZiplineeReleaseEvent{
 			RepoSource: "github.com",
-			RepoOwner:  "estafette",
-			RepoName:   "estafette-ci-api",
+			RepoOwner:  "ziplineeci",
+			RepoName:   "ziplinee-ci-api",
 			Target:     "development",
 			Status:     "succeeded",
 			Event:      "finished",
 		}
 
-		trigger := EstafetteReleaseTrigger{
+		trigger := ZiplineeReleaseTrigger{
 			Event:  "finished",
 			Status: "succeeded",
-			Name:   "github.com/estafette/estafette-ci-builder",
+			Name:   "github.com/ziplineeci/ziplinee-ci-builder",
 			Target: "development",
 		}
 
@@ -276,19 +276,19 @@ func TestEstafetteReleaseTriggerFires(t *testing.T) {
 
 	t.Run("ReturnsFalseIfBranchDoesNotMatch", func(t *testing.T) {
 
-		event := EstafetteReleaseEvent{
+		event := ZiplineeReleaseEvent{
 			RepoSource: "github.com",
-			RepoOwner:  "estafette",
-			RepoName:   "estafette-ci-api",
+			RepoOwner:  "ziplineeci",
+			RepoName:   "ziplinee-ci-api",
 			Target:     "development",
 			Status:     "succeeded",
 			Event:      "finished",
 		}
 
-		trigger := EstafetteReleaseTrigger{
+		trigger := ZiplineeReleaseTrigger{
 			Event:  "finished",
 			Status: "succeeded",
-			Name:   "github.com/estafette/estafette-ci-api",
+			Name:   "github.com/ziplineeci/ziplinee-ci-api",
 			Target: "staging",
 		}
 
@@ -299,14 +299,14 @@ func TestEstafetteReleaseTriggerFires(t *testing.T) {
 	})
 }
 
-func TestEstafetteCronTriggerFires(t *testing.T) {
+func TestZiplineeCronTriggerFires(t *testing.T) {
 	t.Run("ReturnsTrueIfEventTimeMatchesCronSchedule", func(t *testing.T) {
 
-		event := EstafetteCronEvent{
+		event := ZiplineeCronEvent{
 			Time: time.Date(2019, 4, 5, 11, 10, 0, 0, time.UTC),
 		}
 
-		trigger := EstafetteCronTrigger{
+		trigger := ZiplineeCronTrigger{
 			Schedule: "*/5 * * * *",
 		}
 
@@ -318,11 +318,11 @@ func TestEstafetteCronTriggerFires(t *testing.T) {
 
 	t.Run("ReturnsTrueIfEventTimeMatchesCronSchedule", func(t *testing.T) {
 
-		event := EstafetteCronEvent{
+		event := ZiplineeCronEvent{
 			Time: time.Date(2019, 4, 5, 11, 12, 1, 0, time.UTC),
 		}
 
-		trigger := EstafetteCronTrigger{
+		trigger := ZiplineeCronTrigger{
 			Schedule: "*/5 * * * *",
 		}
 
@@ -333,15 +333,15 @@ func TestEstafetteCronTriggerFires(t *testing.T) {
 	})
 }
 
-func TestEstafetteGitTriggerFires(t *testing.T) {
+func TestZiplineeGitTriggerFires(t *testing.T) {
 	t.Run("ReturnsTrueIfEventStatusNameAndBranchMatch", func(t *testing.T) {
 
-		event := EstafetteGitEvent{
+		event := ZiplineeGitEvent{
 			Event:      "push",
 			Repository: "bitbucket.org/xivart/icarus_to_email_service_trigger",
 			Branch:     "main"}
 
-		trigger := EstafetteGitTrigger{
+		trigger := ZiplineeGitTrigger{
 			Event:      "push",
 			Repository: "bitbucket.org/xivart/icarus_to_email_service_trigger",
 			Branch:     "main",
@@ -354,14 +354,14 @@ func TestEstafetteGitTriggerFires(t *testing.T) {
 	})
 }
 
-func TestEstafetteGithubTriggerFires(t *testing.T) {
+func TestZiplineeGithubTriggerFires(t *testing.T) {
 	t.Run("ReturnsTrueIfEventIsContainedInTriggerEvents", func(t *testing.T) {
 
-		event := EstafetteGithubEvent{
+		event := ZiplineeGithubEvent{
 			Event: "create",
 		}
 
-		trigger := EstafetteGithubTrigger{
+		trigger := ZiplineeGithubTrigger{
 			Events: []string{
 				"commit_comment",
 				"create",
@@ -382,14 +382,14 @@ func TestEstafetteGithubTriggerFires(t *testing.T) {
 	})
 }
 
-func TestEstafetteBitbucketTriggerFires(t *testing.T) {
+func TestZiplineeBitbucketTriggerFires(t *testing.T) {
 	t.Run("ReturnsTrueIfEventIsContainedInTriggerEvents", func(t *testing.T) {
 
-		event := EstafetteGithubEvent{
+		event := ZiplineeGithubEvent{
 			Event: "pullrequest:comment_created",
 		}
 
-		trigger := EstafetteGithubTrigger{
+		trigger := ZiplineeGithubTrigger{
 			Events: []string{
 				"pullrequest:fulfilled",
 				"pullrequest:rejected",
@@ -406,15 +406,15 @@ func TestEstafetteBitbucketTriggerFires(t *testing.T) {
 	})
 }
 
-func TestEstafettePubsubTriggerFires(t *testing.T) {
+func TestZiplineePubsubTriggerFires(t *testing.T) {
 	t.Run("ReturnsTrueIfTopicAndProjectMatch", func(t *testing.T) {
 
-		event := EstafettePubSubEvent{
+		event := ZiplineePubSubEvent{
 			Project: "my-project",
 			Topic:   "my-topic",
 		}
 
-		trigger := EstafettePubSubTrigger{
+		trigger := ZiplineePubSubTrigger{
 			Project: "my-project",
 			Topic:   "my-topic",
 		}
@@ -427,12 +427,12 @@ func TestEstafettePubsubTriggerFires(t *testing.T) {
 
 	t.Run("ReturnsFalseIfProjectDoesNotMatch", func(t *testing.T) {
 
-		event := EstafettePubSubEvent{
+		event := ZiplineePubSubEvent{
 			Project: "another-project",
 			Topic:   "my-topic",
 		}
 
-		trigger := EstafettePubSubTrigger{
+		trigger := ZiplineePubSubTrigger{
 			Project: "my-project",
 			Topic:   "my-topic",
 		}
@@ -445,12 +445,12 @@ func TestEstafettePubsubTriggerFires(t *testing.T) {
 
 	t.Run("ReturnsFalseIfTopicDoesNotMatch", func(t *testing.T) {
 
-		event := EstafettePubSubEvent{
+		event := ZiplineePubSubEvent{
 			Project: "my-project",
 			Topic:   "another-topic",
 		}
 
-		trigger := EstafettePubSubTrigger{
+		trigger := ZiplineePubSubTrigger{
 			Project: "my-project",
 			Topic:   "my-topic",
 		}
@@ -463,12 +463,12 @@ func TestEstafettePubsubTriggerFires(t *testing.T) {
 
 	t.Run("ReturnsTrueIfTopicAndProjectMatchAsRegex", func(t *testing.T) {
 
-		event := EstafettePubSubEvent{
+		event := ZiplineePubSubEvent{
 			Project: "my-project",
 			Topic:   "my-topic",
 		}
 
-		trigger := EstafettePubSubTrigger{
+		trigger := ZiplineePubSubTrigger{
 			Project: ".+-project",
 			Topic:   ".+-topic",
 		}
@@ -481,12 +481,12 @@ func TestEstafettePubsubTriggerFires(t *testing.T) {
 
 	t.Run("ReturnsFalseIfProjectDoesNotMatchAsRegex", func(t *testing.T) {
 
-		event := EstafettePubSubEvent{
+		event := ZiplineePubSubEvent{
 			Project: "-project",
 			Topic:   "my-topic",
 		}
 
-		trigger := EstafettePubSubTrigger{
+		trigger := ZiplineePubSubTrigger{
 			Project: ".+-project",
 			Topic:   ".+-topic",
 		}
@@ -499,12 +499,12 @@ func TestEstafettePubsubTriggerFires(t *testing.T) {
 
 	t.Run("ReturnsFalseIfTopicDoesNotMatchAsRegex", func(t *testing.T) {
 
-		event := EstafettePubSubEvent{
+		event := ZiplineePubSubEvent{
 			Project: "my-project",
 			Topic:   "-topic",
 		}
 
-		trigger := EstafettePubSubTrigger{
+		trigger := ZiplineePubSubTrigger{
 			Project: ".+-project",
 			Topic:   ".+-topic",
 		}

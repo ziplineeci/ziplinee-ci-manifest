@@ -1,7 +1,7 @@
 package manifest
 
-// EstafetteService represents a service container to run during a single or multiple stages
-type EstafetteService struct {
+// ZiplineeService represents a service container to run during a single or multiple stages
+type ZiplineeService struct {
 	Name                    string                 `yaml:"name,omitempty"`
 	ContainerImage          string                 `yaml:"image,omitempty"`
 	Shell                   string                 `yaml:"shell,omitempty"`
@@ -39,8 +39,8 @@ type ExecProbe struct {
 	Command []string `yaml:"command,omitempty"`
 }
 
-// UnmarshalYAML customizes unmarshalling an EstafetteService
-func (service *EstafetteService) UnmarshalYAML(unmarshal func(interface{}) error) (err error) {
+// UnmarshalYAML customizes unmarshalling an ZiplineeService
+func (service *ZiplineeService) UnmarshalYAML(unmarshal func(interface{}) error) (err error) {
 
 	var aux struct {
 		Name                    string                 `yaml:"name,omitempty"`
@@ -79,8 +79,8 @@ func (service *EstafetteService) UnmarshalYAML(unmarshal func(interface{}) error
 	return nil
 }
 
-// SetDefaults sets default values for properties of EstafetteService if not defined
-func (service *EstafetteService) SetDefaults(builder EstafetteBuilder, parentStage EstafetteStage) {
+// SetDefaults sets default values for properties of ZiplineeService if not defined
+func (service *ZiplineeService) SetDefaults(builder ZiplineeBuilder, parentStage ZiplineeStage) {
 	if service.Readiness != nil {
 		service.Readiness.SetDefaults(service.Name)
 	}
@@ -114,7 +114,7 @@ func (service *EstafetteService) SetDefaults(builder EstafetteBuilder, parentSta
 	}
 }
 
-// SetDefaults sets default values for properties of EstafetteService if not defined
+// SetDefaults sets default values for properties of ZiplineeService if not defined
 func (readiness *ReadinessProbe) SetDefaults(serviceName string) {
 
 	if readiness.TimeoutSeconds == 0 {

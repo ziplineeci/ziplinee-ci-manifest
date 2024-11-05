@@ -9,95 +9,95 @@ import (
 	"github.com/robfig/cron"
 )
 
-// EstafetteTrigger represents a trigger of any supported type and what action to take if the trigger fired
-type EstafetteTrigger struct {
-	Name      string                     `yaml:"name,omitempty" json:"name,omitempty"`
-	Pipeline  *EstafettePipelineTrigger  `yaml:"pipeline,omitempty" json:"pipeline,omitempty"`
-	Release   *EstafetteReleaseTrigger   `yaml:"release,omitempty" json:"release,omitempty"`
-	Git       *EstafetteGitTrigger       `yaml:"git,omitempty" json:"git,omitempty"`
-	Docker    *EstafetteDockerTrigger    `yaml:"docker,omitempty" json:"docker,omitempty"`
-	Cron      *EstafetteCronTrigger      `yaml:"cron,omitempty" json:"cron,omitempty"`
-	PubSub    *EstafettePubSubTrigger    `yaml:"pubsub,omitempty" json:"pubsub,omitempty"`
-	Github    *EstafetteGithubTrigger    `yaml:"github,omitempty" json:"github,omitempty"`
-	Bitbucket *EstafetteBitbucketTrigger `yaml:"bitbucket,omitempty" json:"bitbucket,omitempty"`
+// ZiplineeTrigger represents a trigger of any supported type and what action to take if the trigger fired
+type ZiplineeTrigger struct {
+	Name      string                    `yaml:"name,omitempty" json:"name,omitempty"`
+	Pipeline  *ZiplineePipelineTrigger  `yaml:"pipeline,omitempty" json:"pipeline,omitempty"`
+	Release   *ZiplineeReleaseTrigger   `yaml:"release,omitempty" json:"release,omitempty"`
+	Git       *ZiplineeGitTrigger       `yaml:"git,omitempty" json:"git,omitempty"`
+	Docker    *ZiplineeDockerTrigger    `yaml:"docker,omitempty" json:"docker,omitempty"`
+	Cron      *ZiplineeCronTrigger      `yaml:"cron,omitempty" json:"cron,omitempty"`
+	PubSub    *ZiplineePubSubTrigger    `yaml:"pubsub,omitempty" json:"pubsub,omitempty"`
+	Github    *ZiplineeGithubTrigger    `yaml:"github,omitempty" json:"github,omitempty"`
+	Bitbucket *ZiplineeBitbucketTrigger `yaml:"bitbucket,omitempty" json:"bitbucket,omitempty"`
 
-	BuildAction   *EstafetteTriggerBuildAction   `yaml:"builds,omitempty" json:"builds,omitempty"`
-	ReleaseAction *EstafetteTriggerReleaseAction `yaml:"releases,omitempty" json:"releases,omitempty"`
-	BotAction     *EstafetteTriggerBotAction     `yaml:"runs,omitempty" json:"runs,omitempty"`
+	BuildAction   *ZiplineeTriggerBuildAction   `yaml:"builds,omitempty" json:"builds,omitempty"`
+	ReleaseAction *ZiplineeTriggerReleaseAction `yaml:"releases,omitempty" json:"releases,omitempty"`
+	BotAction     *ZiplineeTriggerBotAction     `yaml:"runs,omitempty" json:"runs,omitempty"`
 }
 
-// EstafettePipelineTrigger fires for pipeline changes and applies filtering to limit when this results in an action
-type EstafettePipelineTrigger struct {
+// ZiplineePipelineTrigger fires for pipeline changes and applies filtering to limit when this results in an action
+type ZiplineePipelineTrigger struct {
 	Event  string `yaml:"event,omitempty" json:"event,omitempty"`
 	Status string `yaml:"status,omitempty" json:"status,omitempty"`
 	Name   string `yaml:"name,omitempty" json:"name,omitempty"`
 	Branch string `yaml:"branch,omitempty" json:"branch,omitempty"`
 }
 
-// EstafetteReleaseTrigger fires for pipeline releases and applies filtering to limit when this results in an action
-type EstafetteReleaseTrigger struct {
+// ZiplineeReleaseTrigger fires for pipeline releases and applies filtering to limit when this results in an action
+type ZiplineeReleaseTrigger struct {
 	Event  string `yaml:"event,omitempty" json:"event,omitempty"`
 	Status string `yaml:"status,omitempty" json:"status,omitempty"`
 	Name   string `yaml:"name,omitempty" json:"name,omitempty"`
 	Target string `yaml:"target,omitempty" json:"target,omitempty"`
 }
 
-// EstafetteGitTrigger fires for git repository changes and applies filtering to limit when this results in an action
-type EstafetteGitTrigger struct {
+// ZiplineeGitTrigger fires for git repository changes and applies filtering to limit when this results in an action
+type ZiplineeGitTrigger struct {
 	Event      string `yaml:"event,omitempty" json:"event,omitempty"`
 	Repository string `yaml:"repository,omitempty" json:"repository,omitempty"`
 	Branch     string `yaml:"branch,omitempty" json:"branch,omitempty"`
 }
 
-// EstafetteDockerTrigger fires for docker image changes and applies filtering to limit when this results in an action
-type EstafetteDockerTrigger struct {
+// ZiplineeDockerTrigger fires for docker image changes and applies filtering to limit when this results in an action
+type ZiplineeDockerTrigger struct {
 	Event string `yaml:"event,omitempty" json:"event,omitempty"`
 	Image string `yaml:"image,omitempty" json:"image,omitempty"`
 	Tag   string `yaml:"tag,omitempty" json:"tag,omitempty"`
 }
 
-// EstafettePubSubTrigger fires for pubsub events in a certain project and topic
-type EstafettePubSubTrigger struct {
+// ZiplineePubSubTrigger fires for pubsub events in a certain project and topic
+type ZiplineePubSubTrigger struct {
 	Project string `yaml:"project,omitempty" json:"project,omitempty"`
 	Topic   string `yaml:"topic,omitempty" json:"topic,omitempty"`
 }
 
-// EstafetteGithubTrigger fires for github events
-type EstafetteGithubTrigger struct {
+// ZiplineeGithubTrigger fires for github events
+type ZiplineeGithubTrigger struct {
 	Events     []string `yaml:"events,omitempty" json:"events,omitempty"`
 	Repository string   `yaml:"repository,omitempty" json:"repository,omitempty"`
 }
 
-// EstafetteBitbucketTrigger fires for bitbucket events
-type EstafetteBitbucketTrigger struct {
+// ZiplineeBitbucketTrigger fires for bitbucket events
+type ZiplineeBitbucketTrigger struct {
 	Events     []string `yaml:"events,omitempty" json:"events,omitempty"`
 	Repository string   `yaml:"repository,omitempty" json:"repository,omitempty"`
 }
 
-// EstafetteCronTrigger fires at intervals specified by the cron schedule
-type EstafetteCronTrigger struct {
+// ZiplineeCronTrigger fires at intervals specified by the cron schedule
+type ZiplineeCronTrigger struct {
 	Schedule string `yaml:"schedule,omitempty" json:"schedule,omitempty"`
 }
 
-// EstafetteTriggerBuildAction determines what builds when the trigger fires
-type EstafetteTriggerBuildAction struct {
+// ZiplineeTriggerBuildAction determines what builds when the trigger fires
+type ZiplineeTriggerBuildAction struct {
 	Branch string `yaml:"branch,omitempty" json:"branch,omitempty"`
 }
 
-// EstafetteTriggerReleaseAction determines what releases when the trigger fires
-type EstafetteTriggerReleaseAction struct {
+// ZiplineeTriggerReleaseAction determines what releases when the trigger fires
+type ZiplineeTriggerReleaseAction struct {
 	Target  string `yaml:"target,omitempty" json:"target,omitempty"`
 	Action  string `yaml:"action,omitempty" json:"action,omitempty"`
 	Version string `yaml:"version,omitempty" json:"version,omitempty"`
 }
 
-type EstafetteTriggerBotAction struct {
+type ZiplineeTriggerBotAction struct {
 	Bot    string `yaml:"bot,omitempty" json:"bot,omitempty"`
 	Branch string `yaml:"branch,omitempty" json:"branch,omitempty"`
 }
 
-// SetDefaults sets defaults for EstafetteTrigger
-func (t *EstafetteTrigger) SetDefaults(preferences EstafetteManifestPreferences, triggerType TriggerType, targetName string) {
+// SetDefaults sets defaults for ZiplineeTrigger
+func (t *ZiplineeTrigger) SetDefaults(preferences ZiplineeManifestPreferences, triggerType TriggerType, targetName string) {
 	if t.Pipeline != nil {
 		t.Pipeline.SetDefaults()
 	}
@@ -126,24 +126,24 @@ func (t *EstafetteTrigger) SetDefaults(preferences EstafetteManifestPreferences,
 	switch triggerType {
 	case TriggerTypeBuild:
 		if t.BuildAction == nil {
-			t.BuildAction = &EstafetteTriggerBuildAction{}
+			t.BuildAction = &ZiplineeTriggerBuildAction{}
 		}
 		t.BuildAction.SetDefaults(preferences)
 	case TriggerTypeRelease:
 		if t.ReleaseAction == nil {
-			t.ReleaseAction = &EstafetteTriggerReleaseAction{}
+			t.ReleaseAction = &ZiplineeTriggerReleaseAction{}
 		}
 		t.ReleaseAction.SetDefaults(t, targetName)
 	case TriggerTypeBot:
 		if t.BotAction == nil {
-			t.BotAction = &EstafetteTriggerBotAction{}
+			t.BotAction = &ZiplineeTriggerBotAction{}
 		}
 		t.BotAction.SetDefaults(preferences, targetName)
 	}
 }
 
-// SetDefaults sets defaults for EstafettePipelineTrigger
-func (p *EstafettePipelineTrigger) SetDefaults() {
+// SetDefaults sets defaults for ZiplineePipelineTrigger
+func (p *ZiplineePipelineTrigger) SetDefaults() {
 	if p.Event == "" {
 		p.Event = "finished"
 	}
@@ -155,8 +155,8 @@ func (p *EstafettePipelineTrigger) SetDefaults() {
 	}
 }
 
-// SetDefaults sets defaults for EstafetteReleaseTrigger
-func (r *EstafetteReleaseTrigger) SetDefaults() {
+// SetDefaults sets defaults for ZiplineeReleaseTrigger
+func (r *ZiplineeReleaseTrigger) SetDefaults() {
 	if r.Event == "" {
 		r.Event = "finished"
 	}
@@ -165,8 +165,8 @@ func (r *EstafetteReleaseTrigger) SetDefaults() {
 	}
 }
 
-// SetDefaults sets defaults for EstafetteGitTrigger
-func (g *EstafetteGitTrigger) SetDefaults() {
+// SetDefaults sets defaults for ZiplineeGitTrigger
+func (g *ZiplineeGitTrigger) SetDefaults() {
 	if g.Event == "" {
 		g.Event = "push"
 	}
@@ -175,41 +175,41 @@ func (g *EstafetteGitTrigger) SetDefaults() {
 	}
 }
 
-// SetDefaults sets defaults for EstafetteDockerTrigger
-func (d *EstafetteDockerTrigger) SetDefaults() {
+// SetDefaults sets defaults for ZiplineeDockerTrigger
+func (d *ZiplineeDockerTrigger) SetDefaults() {
 }
 
-// SetDefaults sets defaults for EstafetteCronTrigger
-func (c *EstafetteCronTrigger) SetDefaults() {
+// SetDefaults sets defaults for ZiplineeCronTrigger
+func (c *ZiplineeCronTrigger) SetDefaults() {
 }
 
-// SetDefaults sets defaults for EstafettePubSubTrigger
-func (p *EstafettePubSubTrigger) SetDefaults() {
+// SetDefaults sets defaults for ZiplineePubSubTrigger
+func (p *ZiplineePubSubTrigger) SetDefaults() {
 }
 
-// SetDefaults sets defaults for EstafetteGithubTrigger
-func (p *EstafetteGithubTrigger) SetDefaults() {
+// SetDefaults sets defaults for ZiplineeGithubTrigger
+func (p *ZiplineeGithubTrigger) SetDefaults() {
 	if p.Repository == "" {
 		p.Repository = "self"
 	}
 }
 
-// SetDefaults sets defaults for EstafetteBitbucketTrigger
-func (p *EstafetteBitbucketTrigger) SetDefaults() {
+// SetDefaults sets defaults for ZiplineeBitbucketTrigger
+func (p *ZiplineeBitbucketTrigger) SetDefaults() {
 	if p.Repository == "" {
 		p.Repository = "self"
 	}
 }
 
-// SetDefaults sets defaults for EstafetteTriggerBuildAction
-func (b *EstafetteTriggerBuildAction) SetDefaults(preferences EstafetteManifestPreferences) {
+// SetDefaults sets defaults for ZiplineeTriggerBuildAction
+func (b *ZiplineeTriggerBuildAction) SetDefaults(preferences ZiplineeManifestPreferences) {
 	if b.Branch == "" {
 		b.Branch = preferences.DefaultBranch
 	}
 }
 
-// SetDefaults sets defaults for EstafetteTriggerReleaseAction
-func (r *EstafetteTriggerReleaseAction) SetDefaults(t *EstafetteTrigger, targetName string) {
+// SetDefaults sets defaults for ZiplineeTriggerReleaseAction
+func (r *ZiplineeTriggerReleaseAction) SetDefaults(t *ZiplineeTrigger, targetName string) {
 	r.Target = targetName
 	if r.Version == "" {
 		if t.Pipeline != nil && t.Pipeline.Name == "self" {
@@ -222,16 +222,16 @@ func (r *EstafetteTriggerReleaseAction) SetDefaults(t *EstafetteTrigger, targetN
 	}
 }
 
-// SetDefaults sets defaults for EstafetteTriggerReleaseAction
-func (b *EstafetteTriggerBotAction) SetDefaults(preferences EstafetteManifestPreferences, botName string) {
+// SetDefaults sets defaults for ZiplineeTriggerReleaseAction
+func (b *ZiplineeTriggerBotAction) SetDefaults(preferences ZiplineeManifestPreferences, botName string) {
 	b.Bot = botName
 	if b.Branch == "" {
 		b.Branch = preferences.DefaultBranch
 	}
 }
 
-// Validate checks if EstafetteTrigger is valid
-func (t *EstafetteTrigger) Validate(triggerType TriggerType, targetName string) (err error) {
+// Validate checks if ZiplineeTrigger is valid
+func (t *ZiplineeTrigger) Validate(triggerType TriggerType, targetName string) (err error) {
 
 	numberOfTypes := 0
 
@@ -343,8 +343,8 @@ func (t *EstafetteTrigger) Validate(triggerType TriggerType, targetName string) 
 	return nil
 }
 
-// Validate checks if EstafettePipelineTrigger is valid
-func (p *EstafettePipelineTrigger) Validate() (err error) {
+// Validate checks if ZiplineePipelineTrigger is valid
+func (p *ZiplineePipelineTrigger) Validate() (err error) {
 	if p.Event != "started" && p.Event != "finished" {
 		return fmt.Errorf("Set pipeline.event in your trigger to 'started' or 'finished'")
 	}
@@ -352,13 +352,13 @@ func (p *EstafettePipelineTrigger) Validate() (err error) {
 		return fmt.Errorf("Set pipeline.status in your trigger to 'succeeded' or 'failed' for event 'finished'")
 	}
 	if p.Name == "" {
-		return fmt.Errorf("Set pipeline.name in your trigger to 'self' or a full qualified pipeline name, i.e. github.com/estafette/estafette-ci-manifest")
+		return fmt.Errorf("Set pipeline.name in your trigger to 'self' or a full qualified pipeline name, i.e. github.com/ziplineeci/ziplinee-ci-manifest")
 	}
 	return nil
 }
 
-// Validate checks if EstafetteReleaseTrigger is valid
-func (r *EstafetteReleaseTrigger) Validate() (err error) {
+// Validate checks if ZiplineeReleaseTrigger is valid
+func (r *ZiplineeReleaseTrigger) Validate() (err error) {
 	if r.Event != "started" && r.Event != "finished" {
 		return fmt.Errorf("Set release.event in your trigger to 'started' or 'finished'")
 	}
@@ -366,7 +366,7 @@ func (r *EstafetteReleaseTrigger) Validate() (err error) {
 		return fmt.Errorf("Set release.status in your trigger to 'succeeded' or 'failed' for event 'finished'")
 	}
 	if r.Name == "" {
-		return fmt.Errorf("Set release.name in your trigger to 'self' or a full qualified pipeline name, i.e. github.com/estafette/estafette-ci-manifest")
+		return fmt.Errorf("Set release.name in your trigger to 'self' or a full qualified pipeline name, i.e. github.com/ziplineeci/ziplinee-ci-manifest")
 	}
 	if r.Target == "" {
 		return fmt.Errorf("Set release.target in your trigger to a release target name on the pipeline set by release.name")
@@ -374,24 +374,24 @@ func (r *EstafetteReleaseTrigger) Validate() (err error) {
 	return nil
 }
 
-// Validate checks if EstafetteGitTrigger is valid
-func (g *EstafetteGitTrigger) Validate() (err error) {
+// Validate checks if ZiplineeGitTrigger is valid
+func (g *ZiplineeGitTrigger) Validate() (err error) {
 	if g.Event != "push" {
 		return fmt.Errorf("Set git.event in your trigger to 'push'")
 	}
 	if g.Repository == "" {
-		return fmt.Errorf("Set git.repository in your trigger to a full qualified git repository name, i.e. github.com/estafette/estafette-ci-manifest")
+		return fmt.Errorf("Set git.repository in your trigger to a full qualified git repository name, i.e. github.com/ziplineeci/ziplinee-ci-manifest")
 	}
 	return nil
 }
 
-// Validate checks if EstafetteDockerTrigger is valid
-func (d *EstafetteDockerTrigger) Validate() (err error) {
+// Validate checks if ZiplineeDockerTrigger is valid
+func (d *ZiplineeDockerTrigger) Validate() (err error) {
 	return nil
 }
 
-// Validate checks if EstafetteCronTrigger is valid
-func (c *EstafetteCronTrigger) Validate() (err error) {
+// Validate checks if ZiplineeCronTrigger is valid
+func (c *ZiplineeCronTrigger) Validate() (err error) {
 
 	if c.Schedule == "" {
 		return fmt.Errorf("Set cron.schedule in your trigger to '<minute> <hour> <day of month> <month> <day of week>'")
@@ -404,8 +404,8 @@ func (c *EstafetteCronTrigger) Validate() (err error) {
 	return nil
 }
 
-// Validate checks if EstafettePubSubTrigger is valid
-func (p *EstafettePubSubTrigger) Validate() (err error) {
+// Validate checks if ZiplineePubSubTrigger is valid
+func (p *ZiplineePubSubTrigger) Validate() (err error) {
 	if p.Project == "" {
 		return fmt.Errorf("Set pubsub.project in your trigger to the google cloud project id containing the pubsub topic")
 	}
@@ -416,8 +416,8 @@ func (p *EstafettePubSubTrigger) Validate() (err error) {
 	return nil
 }
 
-// Validate checks if EstafetteGithubTrigger is valid
-func (p *EstafetteGithubTrigger) Validate() (err error) {
+// Validate checks if ZiplineeGithubTrigger is valid
+func (p *ZiplineeGithubTrigger) Validate() (err error) {
 	if len(p.Events) == 0 {
 		return fmt.Errorf("Set array github.events in your trigger to at least one github event")
 	}
@@ -425,8 +425,8 @@ func (p *EstafetteGithubTrigger) Validate() (err error) {
 	return nil
 }
 
-// Validate checks if EstafetteBitbucketTrigger is valid
-func (p *EstafetteBitbucketTrigger) Validate() (err error) {
+// Validate checks if ZiplineeBitbucketTrigger is valid
+func (p *ZiplineeBitbucketTrigger) Validate() (err error) {
 	if len(p.Events) == 0 {
 		return fmt.Errorf("Set array bitbucket.events in your trigger to at least one bitbucket event")
 	}
@@ -434,13 +434,13 @@ func (p *EstafetteBitbucketTrigger) Validate() (err error) {
 	return nil
 }
 
-// Validate checks if EstafetteTriggerBuildAction is valid
-func (b *EstafetteTriggerBuildAction) Validate() (err error) {
+// Validate checks if ZiplineeTriggerBuildAction is valid
+func (b *ZiplineeTriggerBuildAction) Validate() (err error) {
 	return nil
 }
 
-// Validate checks if EstafetteTriggerReleaseAction is valid
-func (r *EstafetteTriggerReleaseAction) Validate(targetName string) (err error) {
+// Validate checks if ZiplineeTriggerReleaseAction is valid
+func (r *ZiplineeTriggerReleaseAction) Validate(targetName string) (err error) {
 	if r.Target != targetName {
 		return fmt.Errorf("The target in your releases action should have defaulted to '%v'", targetName)
 	}
@@ -448,13 +448,13 @@ func (r *EstafetteTriggerReleaseAction) Validate(targetName string) (err error) 
 	return nil
 }
 
-// Validate checks if EstafetteTriggerBotAction is valid
-func (b *EstafetteTriggerBotAction) Validate() (err error) {
+// Validate checks if ZiplineeTriggerBotAction is valid
+func (b *ZiplineeTriggerBotAction) Validate() (err error) {
 	return nil
 }
 
 // ReplaceSelf replaces pipeline names set to "self" with the actual pipeline name
-func (t *EstafetteTrigger) ReplaceSelf(pipeline string) {
+func (t *ZiplineeTrigger) ReplaceSelf(pipeline string) {
 	if t.Pipeline != nil && t.Pipeline.Name == "self" {
 		t.Pipeline.Name = pipeline
 	}
@@ -469,8 +469,8 @@ func (t *EstafetteTrigger) ReplaceSelf(pipeline string) {
 	}
 }
 
-// Fires indicates whether EstafettePipelineTrigger fires for an EstafettePipelineEvent
-func (p *EstafettePipelineTrigger) Fires(e *EstafettePipelineEvent) bool {
+// Fires indicates whether ZiplineePipelineTrigger fires for an ZiplineePipelineEvent
+func (p *ZiplineePipelineTrigger) Fires(e *ZiplineePipelineEvent) bool {
 
 	// compare event as regex
 	eventMatched, err := regexMatch(p.Event, e.Event)
@@ -501,8 +501,8 @@ func (p *EstafettePipelineTrigger) Fires(e *EstafettePipelineEvent) bool {
 	return true
 }
 
-// Fires indicates whether EstafetteReleaseTrigger fires for an EstafetteReleaseEvent
-func (r *EstafetteReleaseTrigger) Fires(e *EstafetteReleaseEvent) bool {
+// Fires indicates whether ZiplineeReleaseTrigger fires for an ZiplineeReleaseEvent
+func (r *ZiplineeReleaseTrigger) Fires(e *ZiplineeReleaseEvent) bool {
 	// compare event as regex
 	eventMatched, err := regexMatch(r.Event, e.Event)
 	if err != nil || !eventMatched {
@@ -532,8 +532,8 @@ func (r *EstafetteReleaseTrigger) Fires(e *EstafetteReleaseEvent) bool {
 	return true
 }
 
-// Fires indicates whether EstafetteGitTrigger fires for an EstafetteGitEvent
-func (g *EstafetteGitTrigger) Fires(e *EstafetteGitEvent) bool {
+// Fires indicates whether ZiplineeGitTrigger fires for an ZiplineeGitEvent
+func (g *ZiplineeGitTrigger) Fires(e *ZiplineeGitEvent) bool {
 	// compare event as regex
 	eventMatched, err := regexMatch(g.Event, e.Event)
 	if err != nil || !eventMatched {
@@ -555,13 +555,13 @@ func (g *EstafetteGitTrigger) Fires(e *EstafetteGitEvent) bool {
 	return true
 }
 
-// Fires indicates whether EstafetteDockerTrigger fires for an EstafetteDockerEvent
-func (d *EstafetteDockerTrigger) Fires(e *EstafetteDockerEvent) bool {
+// Fires indicates whether ZiplineeDockerTrigger fires for an ZiplineeDockerEvent
+func (d *ZiplineeDockerTrigger) Fires(e *ZiplineeDockerEvent) bool {
 	return false
 }
 
-// Fires indicates whether EstafetteCronTrigger fires for an EstafetteCronEvent
-func (c *EstafetteCronTrigger) Fires(e *EstafetteCronEvent) bool {
+// Fires indicates whether ZiplineeCronTrigger fires for an ZiplineeCronEvent
+func (c *ZiplineeCronTrigger) Fires(e *ZiplineeCronEvent) bool {
 
 	// ParseStandard expects 5 entries representing: minute, hour, day of month, month and day of week, in that order.
 	sched, err := cron.ParseStandard(c.Schedule)
@@ -613,8 +613,8 @@ func regexMatch(pattern, value string) (bool, error) {
 	return match, nil
 }
 
-// Fires indicates whether EstafettePubSubTrigger fires for an EstafettePubSubEvent
-func (p *EstafettePubSubTrigger) Fires(e *EstafettePubSubEvent) bool {
+// Fires indicates whether ZiplineePubSubTrigger fires for an ZiplineePubSubEvent
+func (p *ZiplineePubSubTrigger) Fires(e *ZiplineePubSubEvent) bool {
 
 	projectMatch, err := regexp.MatchString(fmt.Sprintf("^(%v)$", strings.TrimSpace(p.Project)), e.Project)
 	if !projectMatch || err != nil {
@@ -629,8 +629,8 @@ func (p *EstafettePubSubTrigger) Fires(e *EstafettePubSubEvent) bool {
 	return true
 }
 
-// Fires indicates whether EstafetteGithubTrigger fires for an EstafetteGithubEvent
-func (p *EstafetteGithubTrigger) Fires(e *EstafetteGithubEvent) bool {
+// Fires indicates whether ZiplineeGithubTrigger fires for an ZiplineeGithubEvent
+func (p *ZiplineeGithubTrigger) Fires(e *ZiplineeGithubEvent) bool {
 	if e.Repository != "" && e.Repository != p.Repository {
 		return false
 	}
@@ -644,8 +644,8 @@ func (p *EstafetteGithubTrigger) Fires(e *EstafetteGithubEvent) bool {
 	return true
 }
 
-// Fires indicates whether EstafetteBitbucketTrigger fires for an EstafetteBitbucketEvent
-func (p *EstafetteBitbucketTrigger) Fires(e *EstafetteBitbucketEvent) bool {
+// Fires indicates whether ZiplineeBitbucketTrigger fires for an ZiplineeBitbucketEvent
+func (p *ZiplineeBitbucketTrigger) Fires(e *ZiplineeBitbucketEvent) bool {
 	if e.Repository != "" && e.Repository != p.Repository {
 		return false
 	}

@@ -4,8 +4,8 @@ builder:
   track: dev
 
 labels:
-  app: estafette-ci-builder
-  team: estafette-team
+  app: ziplinee-ci-builder
+  team: ziplinee-team
   language: golang
 
 version:
@@ -24,52 +24,52 @@ env:
 stages:
   build:
     image: golang:1.8.0-alpine
-    workDir: /go/src/github.com/estafette/estafette-ci-builder
+    workDir: /go/src/github.com/ziplineeci/ziplinee-ci-builder
     commands:
     - go test -v ./...
-    - CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o ./publish/estafette-ci-builder .
+    - CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o
+      ./publish/ziplinee-ci-builder .
 
   bake:
     image: docker:17.03.0-ce
     shell: /bin/bash
     commands:
     - cp Dockerfile ./publish
-    - docker build -t estafette-ci-builder ./publish
+    - docker build -t ziplinee-ci-builder ./publish
 
   set-build-status:
     image: extensions/github-status:0.0.2
-    when:
-      server == 'estafette'
+    when: server == 'ziplinee'
 
   push-to-docker-hub:
     image: docker:17.03.0-ce
     commands:
-    - docker login --username=${ESTAFETTE_DOCKER_HUB_USERNAME} --password='${ESTAFETTE_DOCKER_HUB_PASSWORD}'
-    - docker push estafette/${ESTAFETTE_LABEL_APP}:${ESTAFETTE_BUILD_VERSION}
-    when:
-      status == 'succeeded' &&
-      branch == 'main'
+    - docker login --username=${ZIPLINEE_DOCKER_HUB_USERNAME}
+      --password='${ZIPLINEE_DOCKER_HUB_PASSWORD}'
+    - docker push ziplinee/${ZIPLINEE_LABEL_APP}:${ZIPLINEE_BUILD_VERSION}
+    when: status == 'succeeded' && branch == 'main'
 
   slack-notify:
     image: docker:17.03.0-ce
     env:
       SOME_ENVIRONMENT_VAR: "some value with spaces"
     commands:
-    - 'curl -X POST --data-urlencode ''payload={"channel": "#build-status", "username": "estafette-ci-builder", "text": "Build ${ESTAFETTE_BUILD_VERSION} for ${ESTAFETTE_LABEL_APP} has failed!"}'' ${ESTAFETTE_SLACK_WEBHOOK}'
-    when:
-      status == 'failed' ||
-      branch == 'main'
+    - 'curl -X POST --data-urlencode ''payload={"channel": "#build-status",
+      "username": "ziplinee-ci-builder", "text": "Build
+      ${ZIPLINEE_BUILD_VERSION} for ${ZIPLINEE_LABEL_APP} has failed!"}''
+      ${ZIPLINEE_SLACK_WEBHOOK}'
+    when: status == 'failed' || branch == 'main'
     unknownProperty1: value1
     unknownProperty2: value2
     unknownProperty3:
-      - supported1
-      - supported2
+    - supported1
+    - supported2
 
   test-alpha-version:
-    image: extensions/gke:${ESTAFETTE_BUILD_VERSION}
+    image: extensions/gke:${ZIPLINEE_BUILD_VERSION}
     credentials: gke-tooling
     app: gke
-    namespace: estafette
+    namespace: ziplinee
     visibility: private
     container:
       repository: extensions
@@ -115,7 +115,7 @@ releases:
           mountpath: /cockroach-certs
           volume:
             secret:
-              secretName: estafette.client.estafette
+              secretName: ziplinee.client.ziplinee
               items:
               - key: key
                 path: key

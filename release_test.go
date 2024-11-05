@@ -10,7 +10,7 @@ import (
 func TestUnmarshalRelease(t *testing.T) {
 	t.Run("ReturnsUnmarshaledRelease", func(t *testing.T) {
 
-		var release EstafetteRelease
+		var release ZiplineeRelease
 
 		// act
 		err := yaml.Unmarshal([]byte(`
@@ -34,18 +34,18 @@ stages:
 func TestReleaseToYamlMarshalling(t *testing.T) {
 	t.Run("UnmarshallingThenMarshallingReturnsTheSameFile", func(t *testing.T) {
 
-		var release EstafetteRelease
+		var release ZiplineeRelease
 
 		input := `stages:
   deploy:
     image: extensions/deploy-to-kubernetes-engine:stable
     shell: /bin/sh
-    workDir: /estafette-work
+    workDir: /ziplinee-work
     when: status == 'succeeded'
   create-release-notes:
     image: extensions/create-release-notes-from-changelog:stable
     shell: /bin/sh
-    workDir: /estafette-work
+    workDir: /ziplinee-work
     when: status == 'succeeded'
 `
 		err := yaml.Unmarshal([]byte(input), &release)

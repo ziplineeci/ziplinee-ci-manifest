@@ -6,20 +6,20 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestEstafetteTriggerValidate(t *testing.T) {
+func TestZiplineeTriggerValidate(t *testing.T) {
 	t.Run("ReturnsNoErrorIfOneTypeAndBuildActionIsSetForTriggerTypeBuild", func(t *testing.T) {
 
-		trigger := EstafetteTrigger{
-			Pipeline: &EstafettePipelineTrigger{
+		trigger := ZiplineeTrigger{
+			Pipeline: &ZiplineePipelineTrigger{
 				Event:  "finished",
 				Status: "succeeded",
-				Name:   "github.com/estafette/estafette-ci-api",
+				Name:   "github.com/ziplineeci/ziplinee-ci-api",
 				Branch: "master",
 			},
 			Git:    nil,
 			Docker: nil,
 			Cron:   nil,
-			BuildAction: &EstafetteTriggerBuildAction{
+			BuildAction: &ZiplineeTriggerBuildAction{
 				Branch: "master",
 			},
 			ReleaseAction: nil,
@@ -33,18 +33,18 @@ func TestEstafetteTriggerValidate(t *testing.T) {
 
 	t.Run("ReturnsNoErrorIfOneTypeAndReleaseActionIsSetForTriggerTypeRelease", func(t *testing.T) {
 
-		trigger := EstafetteTrigger{
-			Pipeline: &EstafettePipelineTrigger{
+		trigger := ZiplineeTrigger{
+			Pipeline: &ZiplineePipelineTrigger{
 				Event:  "finished",
 				Status: "succeeded",
-				Name:   "github.com/estafette/estafette-ci-api",
+				Name:   "github.com/ziplineeci/ziplinee-ci-api",
 				Branch: "master",
 			},
 			Git:         nil,
 			Docker:      nil,
 			Cron:        nil,
 			BuildAction: nil,
-			ReleaseAction: &EstafetteTriggerReleaseAction{
+			ReleaseAction: &ZiplineeTriggerReleaseAction{
 				Target: "development",
 			},
 		}
@@ -57,15 +57,15 @@ func TestEstafetteTriggerValidate(t *testing.T) {
 
 	t.Run("ReturnsErrorIfAllTypesAreEmpty", func(t *testing.T) {
 
-		trigger := EstafetteTrigger{
+		trigger := ZiplineeTrigger{
 			Pipeline: nil,
 			Git:      nil,
 			Docker:   nil,
 			Cron:     nil,
-			BuildAction: &EstafetteTriggerBuildAction{
+			BuildAction: &ZiplineeTriggerBuildAction{
 				Branch: "master",
 			},
-			ReleaseAction: &EstafetteTriggerReleaseAction{
+			ReleaseAction: &ZiplineeTriggerReleaseAction{
 				Target: "development",
 			},
 		}
@@ -78,11 +78,11 @@ func TestEstafetteTriggerValidate(t *testing.T) {
 
 	t.Run("ReturnsErrorIfAllActionsAreEmpty", func(t *testing.T) {
 
-		trigger := EstafetteTrigger{
-			Pipeline: &EstafettePipelineTrigger{
+		trigger := ZiplineeTrigger{
+			Pipeline: &ZiplineePipelineTrigger{
 				Event:  "finished",
 				Status: "succeeded",
-				Name:   "github.com/estafette/estafette-ci-api",
+				Name:   "github.com/ziplineeci/ziplinee-ci-api",
 				Branch: "master",
 			},
 			Git:           nil,
@@ -100,21 +100,21 @@ func TestEstafetteTriggerValidate(t *testing.T) {
 
 	t.Run("ReturnsErrorIfMoreThanOneTypeIsSet", func(t *testing.T) {
 
-		trigger := EstafetteTrigger{
-			Pipeline: &EstafettePipelineTrigger{
+		trigger := ZiplineeTrigger{
+			Pipeline: &ZiplineePipelineTrigger{
 				Event:  "finished",
 				Status: "succeeded",
-				Name:   "github.com/estafette/estafette-ci-api",
+				Name:   "github.com/ziplineeci/ziplinee-ci-api",
 				Branch: "master",
 			},
-			Git: &EstafetteGitTrigger{
+			Git: &ZiplineeGitTrigger{
 				Event:      "push",
-				Repository: "github.com/estafette/estafette-ci-builder",
+				Repository: "github.com/ziplineeci/ziplinee-ci-builder",
 				Branch:     "master",
 			},
 			Docker: nil,
 			Cron:   nil,
-			BuildAction: &EstafetteTriggerBuildAction{
+			BuildAction: &ZiplineeTriggerBuildAction{
 				Branch: "master",
 			},
 			ReleaseAction: nil,
@@ -128,20 +128,20 @@ func TestEstafetteTriggerValidate(t *testing.T) {
 
 	t.Run("ReturnsErrorIfMoreThanOneActionIsSet", func(t *testing.T) {
 
-		trigger := EstafetteTrigger{
-			Pipeline: &EstafettePipelineTrigger{
+		trigger := ZiplineeTrigger{
+			Pipeline: &ZiplineePipelineTrigger{
 				Event:  "finished",
 				Status: "succeeded",
-				Name:   "github.com/estafette/estafette-ci-api",
+				Name:   "github.com/ziplineeci/ziplinee-ci-api",
 				Branch: "master",
 			},
 			Git:    nil,
 			Docker: nil,
 			Cron:   nil,
-			BuildAction: &EstafetteTriggerBuildAction{
+			BuildAction: &ZiplineeTriggerBuildAction{
 				Branch: "master",
 			},
-			ReleaseAction: &EstafetteTriggerReleaseAction{
+			ReleaseAction: &ZiplineeTriggerReleaseAction{
 				Target: "development",
 			},
 		}
@@ -153,13 +153,13 @@ func TestEstafetteTriggerValidate(t *testing.T) {
 	})
 }
 
-func TestEstafettePipelineTriggerValidate(t *testing.T) {
+func TestZiplineePipelineTriggerValidate(t *testing.T) {
 	t.Run("ReturnsErrorIfEventIsEmpty", func(t *testing.T) {
 
-		trigger := EstafettePipelineTrigger{
+		trigger := ZiplineePipelineTrigger{
 			Event:  "",
 			Status: "succeeded",
-			Name:   "github.com/estafette/estafette-ci-manifest",
+			Name:   "github.com/ziplineeci/ziplinee-ci-manifest",
 			Branch: "master",
 		}
 
@@ -171,10 +171,10 @@ func TestEstafettePipelineTriggerValidate(t *testing.T) {
 
 	t.Run("ReturnsErrorIfStatusIsEmptyWhenEventIsFinished", func(t *testing.T) {
 
-		trigger := EstafettePipelineTrigger{
+		trigger := ZiplineePipelineTrigger{
 			Event:  "finished",
 			Status: "",
-			Name:   "github.com/estafette/estafette-ci-manifest",
+			Name:   "github.com/ziplineeci/ziplinee-ci-manifest",
 			Branch: "master",
 		}
 
@@ -186,10 +186,10 @@ func TestEstafettePipelineTriggerValidate(t *testing.T) {
 
 	t.Run("ReturnsNoErrorIfStatusIsEmptyWhenEventIsStarted", func(t *testing.T) {
 
-		trigger := EstafettePipelineTrigger{
+		trigger := ZiplineePipelineTrigger{
 			Event:  "started",
 			Status: "",
-			Name:   "github.com/estafette/estafette-ci-manifest",
+			Name:   "github.com/ziplineeci/ziplinee-ci-manifest",
 			Branch: "master",
 		}
 
@@ -201,7 +201,7 @@ func TestEstafettePipelineTriggerValidate(t *testing.T) {
 
 	t.Run("ReturnsErrorIfNameIsEmpty", func(t *testing.T) {
 
-		trigger := EstafettePipelineTrigger{
+		trigger := ZiplineePipelineTrigger{
 			Event:  "finished",
 			Status: "succeeded",
 			Name:   "",
@@ -216,10 +216,10 @@ func TestEstafettePipelineTriggerValidate(t *testing.T) {
 
 	t.Run("ReturnsNoErrorIfValid", func(t *testing.T) {
 
-		trigger := EstafettePipelineTrigger{
+		trigger := ZiplineePipelineTrigger{
 			Event:  "finished",
 			Status: "succeeded",
-			Name:   "github.com/estafette/estafette-ci-manifest",
+			Name:   "github.com/ziplineeci/ziplinee-ci-manifest",
 			Branch: "master",
 		}
 
@@ -230,13 +230,13 @@ func TestEstafettePipelineTriggerValidate(t *testing.T) {
 	})
 }
 
-func TestEstafetteReleaseTriggerValidate(t *testing.T) {
+func TestZiplineeReleaseTriggerValidate(t *testing.T) {
 	t.Run("ReturnsErrorIfEventIsEmpty", func(t *testing.T) {
 
-		trigger := EstafetteReleaseTrigger{
+		trigger := ZiplineeReleaseTrigger{
 			Event:  "",
 			Status: "succeeded",
-			Name:   "github.com/estafette/estafette-ci-manifest",
+			Name:   "github.com/ziplineeci/ziplinee-ci-manifest",
 			Target: "development",
 		}
 
@@ -248,10 +248,10 @@ func TestEstafetteReleaseTriggerValidate(t *testing.T) {
 
 	t.Run("ReturnsErrorIfStatusIsEmptyWhenEventIsFinished", func(t *testing.T) {
 
-		trigger := EstafetteReleaseTrigger{
+		trigger := ZiplineeReleaseTrigger{
 			Event:  "finished",
 			Status: "",
-			Name:   "github.com/estafette/estafette-ci-manifest",
+			Name:   "github.com/ziplineeci/ziplinee-ci-manifest",
 			Target: "development",
 		}
 
@@ -263,10 +263,10 @@ func TestEstafetteReleaseTriggerValidate(t *testing.T) {
 
 	t.Run("ReturnsNoErrorIfStatusIsEmptyWhenEventIsStarted", func(t *testing.T) {
 
-		trigger := EstafetteReleaseTrigger{
+		trigger := ZiplineeReleaseTrigger{
 			Event:  "started",
 			Status: "",
-			Name:   "github.com/estafette/estafette-ci-manifest",
+			Name:   "github.com/ziplineeci/ziplinee-ci-manifest",
 			Target: "development",
 		}
 
@@ -278,7 +278,7 @@ func TestEstafetteReleaseTriggerValidate(t *testing.T) {
 
 	t.Run("ReturnsErrorIfNameIsEmpty", func(t *testing.T) {
 
-		trigger := EstafetteReleaseTrigger{
+		trigger := ZiplineeReleaseTrigger{
 			Event:  "finished",
 			Status: "succeeded",
 			Name:   "",
@@ -293,10 +293,10 @@ func TestEstafetteReleaseTriggerValidate(t *testing.T) {
 
 	t.Run("ReturnsErrorIfTargetIsEmpty", func(t *testing.T) {
 
-		trigger := EstafetteReleaseTrigger{
+		trigger := ZiplineeReleaseTrigger{
 			Event:  "finished",
 			Status: "succeeded",
-			Name:   "github.com/estafette/estafette-ci-manifest",
+			Name:   "github.com/ziplineeci/ziplinee-ci-manifest",
 			Target: "",
 		}
 
@@ -308,10 +308,10 @@ func TestEstafetteReleaseTriggerValidate(t *testing.T) {
 
 	t.Run("ReturnsNoErrorIfValid", func(t *testing.T) {
 
-		trigger := EstafetteReleaseTrigger{
+		trigger := ZiplineeReleaseTrigger{
 			Event:  "finished",
 			Status: "succeeded",
-			Name:   "github.com/estafette/estafette-ci-manifest",
+			Name:   "github.com/ziplineeci/ziplinee-ci-manifest",
 			Target: "development",
 		}
 
@@ -322,12 +322,12 @@ func TestEstafetteReleaseTriggerValidate(t *testing.T) {
 	})
 }
 
-func TestEstafetteGitTriggerValidate(t *testing.T) {
+func TestZiplineeGitTriggerValidate(t *testing.T) {
 	t.Run("ReturnsErrorIfEventIsEmpty", func(t *testing.T) {
 
-		trigger := EstafetteGitTrigger{
+		trigger := ZiplineeGitTrigger{
 			Event:      "",
-			Repository: "github.com/estafette/estafette-ci-manifest",
+			Repository: "github.com/ziplineeci/ziplinee-ci-manifest",
 		}
 
 		// act
@@ -338,7 +338,7 @@ func TestEstafetteGitTriggerValidate(t *testing.T) {
 
 	t.Run("ReturnsErrorIfRepositoryIsEmpty", func(t *testing.T) {
 
-		trigger := EstafetteGitTrigger{
+		trigger := ZiplineeGitTrigger{
 			Event:      "push",
 			Repository: "",
 		}
@@ -351,9 +351,9 @@ func TestEstafetteGitTriggerValidate(t *testing.T) {
 
 	t.Run("ReturnsNoErrorIfValid", func(t *testing.T) {
 
-		trigger := EstafetteGitTrigger{
+		trigger := ZiplineeGitTrigger{
 			Event:      "push",
-			Repository: "github.com/estafette/estafette-ci-manifest",
+			Repository: "github.com/ziplineeci/ziplinee-ci-manifest",
 		}
 
 		// act
@@ -363,10 +363,10 @@ func TestEstafetteGitTriggerValidate(t *testing.T) {
 	})
 }
 
-func TestEstafetteCronTriggerValidate(t *testing.T) {
+func TestZiplineeCronTriggerValidate(t *testing.T) {
 	t.Run("ReturnsErrorIfScheduleIsEmpty", func(t *testing.T) {
 
-		trigger := EstafetteCronTrigger{
+		trigger := ZiplineeCronTrigger{
 			Schedule: "",
 		}
 
@@ -378,7 +378,7 @@ func TestEstafetteCronTriggerValidate(t *testing.T) {
 
 	t.Run("ReturnsErrorIfScheduleIsInvalid", func(t *testing.T) {
 
-		trigger := EstafetteCronTrigger{
+		trigger := ZiplineeCronTrigger{
 			Schedule: "0 * * * * *",
 		}
 
@@ -390,7 +390,7 @@ func TestEstafetteCronTriggerValidate(t *testing.T) {
 
 	t.Run("ReturnsNoErrorIfScheduleIsValid", func(t *testing.T) {
 
-		trigger := EstafetteCronTrigger{
+		trigger := ZiplineeCronTrigger{
 			Schedule: "*/5 * * * *",
 		}
 

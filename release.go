@@ -5,28 +5,28 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
-// EstafetteRelease represents a release target that in itself contains one or multiple stages
-type EstafetteRelease struct {
-	Name            string                    `yaml:"-"`
-	Builder         *EstafetteBuilder         `yaml:"builder,omitempty"`
-	CloneRepository *bool                     `yaml:"clone,omitempty" json:",omitempty"`
-	Actions         []*EstafetteReleaseAction `yaml:"actions,omitempty" json:",omitempty"`
-	Triggers        []*EstafetteTrigger       `yaml:"triggers,omitempty" json:",omitempty"`
-	Stages          []*EstafetteStage         `yaml:"-" json:",omitempty"`
-	Template        string                    `yaml:"template,omitempty"`
+// ZiplineeRelease represents a release target that in itself contains one or multiple stages
+type ZiplineeRelease struct {
+	Name            string                   `yaml:"-"`
+	Builder         *ZiplineeBuilder         `yaml:"builder,omitempty"`
+	CloneRepository *bool                    `yaml:"clone,omitempty" json:",omitempty"`
+	Actions         []*ZiplineeReleaseAction `yaml:"actions,omitempty" json:",omitempty"`
+	Triggers        []*ZiplineeTrigger       `yaml:"triggers,omitempty" json:",omitempty"`
+	Stages          []*ZiplineeStage         `yaml:"-" json:",omitempty"`
+	Template        string                   `yaml:"template,omitempty"`
 }
 
-// UnmarshalYAML customizes unmarshalling an EstafetteRelease
-func (release *EstafetteRelease) UnmarshalYAML(unmarshal func(interface{}) error) (err error) {
+// UnmarshalYAML customizes unmarshalling an ZiplineeRelease
+func (release *ZiplineeRelease) UnmarshalYAML(unmarshal func(interface{}) error) (err error) {
 
 	var aux struct {
-		Name            string                    `yaml:"name"`
-		Builder         *EstafetteBuilder         `yaml:"builder"`
-		CloneRepository *bool                     `yaml:"clone"`
-		Actions         []*EstafetteReleaseAction `yaml:"actions"`
-		Triggers        []*EstafetteTrigger       `yaml:"triggers"`
-		Stages          yaml.MapSlice             `yaml:"stages"`
-		Template        string                    `yaml:"template"`
+		Name            string                   `yaml:"name"`
+		Builder         *ZiplineeBuilder         `yaml:"builder"`
+		CloneRepository *bool                    `yaml:"clone"`
+		Actions         []*ZiplineeReleaseAction `yaml:"actions"`
+		Triggers        []*ZiplineeTrigger       `yaml:"triggers"`
+		Stages          yaml.MapSlice            `yaml:"stages"`
+		Template        string                   `yaml:"template"`
 	}
 
 	// unmarshal to auxiliary type
@@ -49,12 +49,12 @@ func (release *EstafetteRelease) UnmarshalYAML(unmarshal func(interface{}) error
 			return err
 		}
 
-		var stage *EstafetteStage
+		var stage *ZiplineeStage
 		if err := yaml.Unmarshal(bytes, &stage); err != nil {
 			return err
 		}
 		if stage == nil {
-			stage = &EstafetteStage{}
+			stage = &ZiplineeStage{}
 		}
 
 		// set the stage name, overwriting the name property if set on the stage explicitly
@@ -66,17 +66,17 @@ func (release *EstafetteRelease) UnmarshalYAML(unmarshal func(interface{}) error
 	return nil
 }
 
-// MarshalYAML customizes marshalling an EstafetteManifest
-func (release EstafetteRelease) MarshalYAML() (out interface{}, err error) {
+// MarshalYAML customizes marshalling an ZiplineeManifest
+func (release ZiplineeRelease) MarshalYAML() (out interface{}, err error) {
 
 	var aux struct {
-		Name            string                    `yaml:"-"`
-		Builder         *EstafetteBuilder         `yaml:"builder,omitempty"`
-		CloneRepository *bool                     `yaml:"clone,omitempty"`
-		Actions         []*EstafetteReleaseAction `yaml:"actions,omitempty"`
-		Triggers        []*EstafetteTrigger       `yaml:"triggers,omitempty"`
-		Stages          yaml.MapSlice             `yaml:"stages,omitempty"`
-		Template        string                    `yaml:"template,omitempty"`
+		Name            string                   `yaml:"-"`
+		Builder         *ZiplineeBuilder         `yaml:"builder,omitempty"`
+		CloneRepository *bool                    `yaml:"clone,omitempty"`
+		Actions         []*ZiplineeReleaseAction `yaml:"actions,omitempty"`
+		Triggers        []*ZiplineeTrigger       `yaml:"triggers,omitempty"`
+		Stages          yaml.MapSlice            `yaml:"stages,omitempty"`
+		Template        string                   `yaml:"template,omitempty"`
 	}
 
 	// map auxiliary properties
@@ -97,7 +97,7 @@ func (release EstafetteRelease) MarshalYAML() (out interface{}, err error) {
 }
 
 // DeepCopy provides a copy of all nested pointers
-func (release EstafetteRelease) DeepCopy() (target EstafetteRelease) {
+func (release ZiplineeRelease) DeepCopy() (target ZiplineeRelease) {
 
 	copier.CopyWithOption(&target, release, copier.Option{IgnoreEmpty: true, DeepCopy: true})
 
@@ -105,7 +105,7 @@ func (release EstafetteRelease) DeepCopy() (target EstafetteRelease) {
 }
 
 // InitFromTemplate uses template values for
-func (release *EstafetteRelease) InitFromTemplate(releaseTemplates map[string]*EstafetteReleaseTemplate) {
+func (release *ZiplineeRelease) InitFromTemplate(releaseTemplates map[string]*ZiplineeReleaseTemplate) {
 
 	if release.Template != "" {
 		// check if template with defined name exists, and use its values overridden by this releases values

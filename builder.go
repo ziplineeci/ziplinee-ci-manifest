@@ -7,16 +7,16 @@ import (
 	foundation "github.com/ziplineeci/ziplinee-foundation"
 )
 
-// EstafetteBuilder contains configuration for the ci-builder component
-type EstafetteBuilder struct {
+// ZiplineeBuilder contains configuration for the ci-builder component
+type ZiplineeBuilder struct {
 	Track           string          `yaml:"track,omitempty"`
 	OperatingSystem OperatingSystem `yaml:"os,omitempty"`
 	StorageMedium   StorageMedium   `yaml:"medium,omitempty"`
 	BuilderType     BuilderType     `yaml:"type,omitempty"`
 }
 
-// UnmarshalYAML customizes unmarshalling an EstafetteBuilder
-func (builder *EstafetteBuilder) UnmarshalYAML(unmarshal func(interface{}) error) (err error) {
+// UnmarshalYAML customizes unmarshalling an ZiplineeBuilder
+func (builder *ZiplineeBuilder) UnmarshalYAML(unmarshal func(interface{}) error) (err error) {
 
 	var aux struct {
 		Track           string          `yaml:"track"`
@@ -39,8 +39,8 @@ func (builder *EstafetteBuilder) UnmarshalYAML(unmarshal func(interface{}) error
 	return nil
 }
 
-// SetDefaults sets default values for properties of EstafetteBuilder if not defined
-func (builder *EstafetteBuilder) SetDefaults(preferences EstafetteManifestPreferences) {
+// SetDefaults sets default values for properties of ZiplineeBuilder if not defined
+func (builder *ZiplineeBuilder) SetDefaults(preferences ZiplineeManifestPreferences) {
 	// set default for OperatingSystem if not set
 	if builder.OperatingSystem == OperatingSystemUnknown {
 		builder.OperatingSystem = preferences.BuilderOperatingSystems[0]
@@ -54,7 +54,7 @@ func (builder *EstafetteBuilder) SetDefaults(preferences EstafetteManifestPrefer
 	}
 }
 
-func (builder *EstafetteBuilder) validate(preferences EstafetteManifestPreferences) (err error) {
+func (builder *ZiplineeBuilder) validate(preferences ZiplineeManifestPreferences) (err error) {
 
 	if !OperatingSystemArrayContains(preferences.BuilderOperatingSystems, builder.OperatingSystem) {
 

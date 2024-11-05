@@ -6,8 +6,8 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
-// EstafetteStage represents a stage of a build pipeline or release
-type EstafetteStage struct {
+// ZiplineeStage represents a stage of a build pipeline or release
+type ZiplineeStage struct {
 	Name                    string                 `yaml:"-" json:",omitempty"`
 	ContainerImage          string                 `yaml:"image,omitempty" json:",omitempty"`
 	Shell                   string                 `yaml:"shell,omitempty" json:",omitempty"`
@@ -17,13 +17,13 @@ type EstafetteStage struct {
 	When                    string                 `yaml:"when,omitempty" json:",omitempty"`
 	EnvVars                 map[string]string      `yaml:"env,omitempty" json:",omitempty"`
 	AutoInjected            bool                   `yaml:"autoInjected,omitempty" json:",omitempty"`
-	ParallelStages          []*EstafetteStage      `yaml:"parallelStages,omitempty" json:",omitempty"`
-	Services                []*EstafetteService    `yaml:"services,omitempty" json:",omitempty"`
+	ParallelStages          []*ZiplineeStage       `yaml:"parallelStages,omitempty" json:",omitempty"`
+	Services                []*ZiplineeService     `yaml:"services,omitempty" json:",omitempty"`
 	CustomProperties        map[string]interface{} `yaml:",inline" json:",omitempty"`
 }
 
-// UnmarshalYAML customizes unmarshalling an EstafetteStage
-func (stage *EstafetteStage) UnmarshalYAML(unmarshal func(interface{}) error) (err error) {
+// UnmarshalYAML customizes unmarshalling an ZiplineeStage
+func (stage *ZiplineeStage) UnmarshalYAML(unmarshal func(interface{}) error) (err error) {
 
 	var aux struct {
 		Name                    string                 `yaml:"name,omitempty"`
@@ -36,7 +36,7 @@ func (stage *EstafetteStage) UnmarshalYAML(unmarshal func(interface{}) error) (e
 		EnvVars                 map[string]string      `yaml:"env,omitempty"`
 		AutoInjected            bool                   `yaml:"autoInjected,omitempty"`
 		ParallelStages          yaml.MapSlice          `yaml:"parallelStages"`
-		Services                []*EstafetteService    `yaml:"services,omitempty"`
+		Services                []*ZiplineeService     `yaml:"services,omitempty"`
 		CustomProperties        map[string]interface{} `yaml:",inline"`
 	}
 
@@ -64,12 +64,12 @@ func (stage *EstafetteStage) UnmarshalYAML(unmarshal func(interface{}) error) (e
 			return err
 		}
 
-		var innerStage *EstafetteStage
+		var innerStage *ZiplineeStage
 		if err := yaml.Unmarshal(bytes, &innerStage); err != nil {
 			return err
 		}
 		if innerStage == nil {
-			innerStage = &EstafetteStage{}
+			innerStage = &ZiplineeStage{}
 		}
 
 		if innerStage.Name == "" {
@@ -84,8 +84,8 @@ func (stage *EstafetteStage) UnmarshalYAML(unmarshal func(interface{}) error) (e
 	return nil
 }
 
-// SetDefaults sets default values for properties of EstafetteStage if not defined
-func (stage *EstafetteStage) SetDefaults(builder EstafetteBuilder) {
+// SetDefaults sets default values for properties of ZiplineeStage if not defined
+func (stage *ZiplineeStage) SetDefaults(builder ZiplineeBuilder) {
 	// set default for Shell if not set
 	if len(stage.ParallelStages) == 0 && stage.Shell == "" {
 		if builder.OperatingSystem == "windows" {
@@ -98,9 +98,9 @@ func (stage *EstafetteStage) SetDefaults(builder EstafetteBuilder) {
 	// set default for WorkingDirectory if not set
 	if len(stage.ParallelStages) == 0 && stage.WorkingDirectory == "" {
 		if builder.OperatingSystem == "windows" {
-			stage.WorkingDirectory = "C:/estafette-work"
+			stage.WorkingDirectory = "C:/ziplinee-work"
 		} else {
-			stage.WorkingDirectory = "/estafette-work"
+			stage.WorkingDirectory = "/ziplinee-work"
 		}
 	}
 
@@ -120,7 +120,7 @@ func (stage *EstafetteStage) SetDefaults(builder EstafetteBuilder) {
 }
 
 // Validate checks whether the stage has valid parameters
-func (stage *EstafetteStage) Validate() (err error) {
+func (stage *ZiplineeStage) Validate() (err error) {
 
 	if len(stage.ParallelStages) > 0 {
 		if stage.ContainerImage != "" {
